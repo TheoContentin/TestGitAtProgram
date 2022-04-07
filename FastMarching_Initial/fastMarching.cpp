@@ -100,3 +100,4 @@ void affiche(const Image<float>& I) {
     }
     display(B);
 }
+// salut theo
