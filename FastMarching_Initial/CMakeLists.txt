@@ -6,5 +6,6 @@ find_package(Imagine REQUIRED)
 
 project(MehrioKurt)
 
-add_executable(MehrioKurt test.cpp main.cpp)
+add_executable(MehrioKurt test.cpp main.cpp asset.cpp asset.h map.cpp map.h physics.cpp physics.h)
 ImagineUseModules(MehrioKurt Graphics)
+ImagineUseModules(MehrioKurt Images)
