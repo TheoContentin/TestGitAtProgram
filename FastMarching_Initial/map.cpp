@@ -1,12 +1,12 @@
 #include "map.h"
 using namespace Imagine;
 
-map::map(std::string backgroud_path, char* physics_path){
+map::map(char* background_path, char* physics_path){
 
-    if(! load(background, srcPath( backgroud_path ))) {
+    if(! load(background, stringSrcPath( background_path ))){
         std::cout << "Echec de lecture d'image de fond" << std::endl;
     }
-    if(! load(physics,srcPath(physics_path))){
+    if(! load(physics,stringSrcPath(physics_path))){
         std::cout<<"Echec de de lecture de l'image physique"<<std::endl;
     }
 

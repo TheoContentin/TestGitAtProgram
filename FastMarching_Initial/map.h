@@ -15,7 +15,7 @@ private:
     void initialize();
     void makeAxes();
     void generateWalls();
-    map(char* background_path,char*physics)
+    map(char* background_path,char*physics);
 
 public:
     void draw();
