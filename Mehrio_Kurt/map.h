@@ -1,3 +1,4 @@
+#pragma once
 #include <Imagine/Images.h>
 
 using namespace Imagine;
@@ -13,13 +14,15 @@ private:
     bool active;
     Mesh* walls;
     FloatVector3 axe1, axe2, axe3;
-    DoublePoint3 start_position;
-    FloatVector3 start_direction;
+
     void initialize();
     void makeAxes();
     void generateWalls();
-    map(char* background_path,char*physics);
+
 
 public:
+    map(char const * background_path,char const * texture_path,char const *physics);
+    DoublePoint3 start_position;
+    FloatVector3 start_direction;
     void draw();
 };

@@ -3,5 +3,5 @@
 
 kart::kart(map map){
     vit = {0,0};
-    pos = map.start_position
+    pos = map.start_position;
 }

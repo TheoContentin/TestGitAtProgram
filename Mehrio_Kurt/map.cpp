@@ -1,9 +1,12 @@
 #include "map.h"
 using namespace Imagine;
 
-map::map(char* background_path, char* physics_path){
+map::map(char const *background_path,char const *texture_path, char const *physics_path){
 
     if(! load(background, stringSrcPath( background_path ))){
+        std::cout << "Echec de lecture d'image de fond" << std::endl;
+    }
+    if(! load(texture, stringSrcPath( texture_path ))){
         std::cout << "Echec de lecture d'image de fond" << std::endl;
     }
     if(! load(physics,stringSrcPath(physics_path))){
@@ -15,7 +18,49 @@ map::map(char* background_path, char* physics_path){
     axe2 = FloatVector3(0,1,0);
     axe3 = FloatVector3(0,0,1);
 
-    Plane = Mesh::Plane(center,axe1,axe2);
+    // Generation de la texture du sol;
+    int h=texture.size(0);
+    int w=texture.size(1);
+    DoublePoint3 *P=new DoublePoint3[(w+1)*(h+1)];
+    for (int j=0;j<=w;j++)
+        for (int i=0;i<=h;i++)
+            P[i+(h+1)*j]=DoublePoint3(double(i)/h,double(j)/w,0);   // A flat surface to texture
+    Triangle *T=new Triangle[2*(h)*(w)];
+    for (int j=0;j<w;j++) {
+        for (int i=0;i<h;i++) {
+            T[2*(i+(h)*j)]=Triangle(i+(h+1)*j,i+1+(h+1)*j,i+(h+1)*(j+1));
+            T[2*(i+(h)*j)+1]=Triangle(i+1+(h+1)*j,i+1+(h+1)*(j+1),i+(h+1)*(j+1));
+        }
+    }
+    std::cout<<"Triangle Ok"<<std::endl;
+    Quad *Q=new Quad[w*h];
+    for (int j=0;j<w;j++) {
+        for (int i=0;i<h;i++) {
+            Q[i+h*j]=Quad(i+(h+1)*j,i+1+(h+1)*j,i+(h+1)*(j+1),i+1+(h+1)*(j+1));
+        }
+    }
+    std::cout<<"Quad Ok"<<std::endl;
+    Mesh Plane;
+    Plane=Mesh(P,(w+1)*(h+1),T,2*h*w,Q,h*w,FACE_COLOR);
+    std::cout<<"Mesh Ok"<<std::endl;
+    Color *col=new Color[w*h];
+    for (int j=0;j<w;j++) {
+        for (int i=0;i<h;i++) {
+            col[i+h*j]=texture(i,j);
+        }
+    }
+
+    Plane.setColors(QUAD,col);
+
+    std::cout<<"Colors Ok"<<std::endl;
     generateWalls();
 
+}
+
+void map::draw(){
+    showMesh(Plane);
+}
+
+void map::generateWalls(){
+    return;
 }

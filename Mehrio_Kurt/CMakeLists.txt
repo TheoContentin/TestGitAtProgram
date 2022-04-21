@@ -5,6 +5,7 @@ list(APPEND CMAKE_SYSTEM_FRAMEWORK_PATH /Library/Frameworks) #Mac, why not auto?
 find_package(Imagine REQUIRED)
 
 project(MehrioKurt)
+set(CMAKE_CXX_STANDARD 11)
 
 add_executable(MehrioKurt test.cpp main.cpp asset.cpp asset.h map.cpp map.h physics.cpp physics.h kart.cpp kart.h)
 ImagineUseModules(MehrioKurt Graphics)
