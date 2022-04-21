@@ -1,4 +1,4 @@
-//MehrioKurt Théo Contentin Steven Arupalgrasam
+//MehrioKurt Théo Contentin Steven Arulpragasam
 
 
 #include <Imagine/Graphics.h>
