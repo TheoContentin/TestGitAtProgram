@@ -33,24 +33,22 @@ map::map(char const *background_path,char const *texture_path, char const *physi
         }
     }
     std::cout<<"Triangle Ok"<<std::endl;
-    Quad *Q=new Quad[w*h];
-    for (int j=0;j<w;j++) {
-        for (int i=0;i<h;i++) {
-            Q[i+h*j]=Quad(i+(h+1)*j,i+1+(h+1)*j,i+(h+1)*(j+1),i+1+(h+1)*(j+1));
-        }
-    }
+
     std::cout<<"Quad Ok"<<std::endl;
-    Mesh Plane;
-    Plane=Mesh(P,(w+1)*(h+1),T,2*h*w,Q,h*w,FACE_COLOR);
+
+    Plane = Mesh(P,(w+1)*(h+1),T,2*h*w,0,0,FACE_COLOR,SMOOTH_SHADING);
     std::cout<<"Mesh Ok"<<std::endl;
-    Color *col=new Color[w*h];
+
+    Color *col=new Color[2*w*h];
     for (int j=0;j<w;j++) {
         for (int i=0;i<h;i++) {
-            col[i+h*j]=texture(i,j);
+            col[2*(i+(h*j))]=texture(i,j);
+            col[2*(i+h*j)+1]=texture(i,j);
+            std::cout<<"texture(i,j)"<<std::endl;
         }
     }
 
-    Plane.setColors(QUAD,col);
+    Plane.setColors(TRIANGLE,col);
 
     std::cout<<"Colors Ok"<<std::endl;
     generateWalls();
