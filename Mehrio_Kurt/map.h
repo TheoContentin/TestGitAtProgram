@@ -5,6 +5,7 @@ using namespace Imagine;
 class map{
 private:
     Image<Color> background;
+    Image<Color> texture;
     Image<Color> physics;
     float size;
     DoublePoint3 center;
@@ -12,6 +13,8 @@ private:
     bool active;
     Mesh* walls;
     FloatVector3 axe1, axe2, axe3;
+    DoublePoint3 start_position;
+    FloatVector3 start_direction;
     void initialize();
     void makeAxes();
     void generateWalls();
