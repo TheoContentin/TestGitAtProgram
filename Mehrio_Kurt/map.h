@@ -9,11 +9,14 @@ private:
     Image<Color> texture;
     Image<Color> physics;
     float size;
+
     DoublePoint3 center;
     Mesh Plane;
     bool active;
-    std::vector<Mesh> walls;
+    std::vector<Mesh> walls; // La liste des objets Mesh à afficher.
     FloatVector3 axe1, axe2, axe3;
+
+    float wallheight;
 
     void initialize();
     void makeAxes();
@@ -25,6 +28,8 @@ public:
     map(char const * background_path,char const * texture_path,char const *physics);
     DoublePoint3 start_position;
     FloatVector3 start_direction;
+    std::vector<DoublePoint3[2]> compute_walls; // Liste des segments pour verifier les collisions.
+    float kart_size;
     void draw();
 };
 
@@ -55,6 +60,6 @@ public:
 
     void push(PointClasse d);
 
-    PointDist pop();
+    PointClasse pop();
 
 };

@@ -22,6 +22,8 @@ map::map(char const *background_path,char const *texture_path, char const *physi
     axe2 = FloatVector3(0,1,0);
     axe3 = FloatVector3(0,0,1);
 
+    wallheight = 1;
+
     // Generation de la texture du sol;
     int h=texture.size(0);
     int w=texture.size(1);
@@ -61,18 +63,25 @@ map::map(char const *background_path,char const *texture_path, char const *physi
 
 void map::draw(){
     showMesh(Plane);
+    for(int i = 0;i<walls.size();i++){
+        showMesh(walls[i]);
+    }
 }
 
 void map::generateWalls(){
-    //Genere les murs codés en rouge, Fait une boucle fermée
+    //Genere les murs codés en rouge; extraits de petits segments d'une boucle orienté la partie accessible est à gauche de la courbe.
     int h=physics.size(0);
     int w=physics.size(1);
     FilePriorite Q;
     int r,g,b;
+
     for (int j=0;j<w;j++) {
         for (int i=0;i<h;i++) {
-            r,g,b = physics(i,j);
+            r = physics(i,j).r();
+            g = physics(i,j).g();
+            b = physics(i,j).b();
             if((b==0) &&(g==0)){
+                std::cout<<"Premier point : "<<r<<std::endl;
                 Q.push(PointClasse(r,DoublePoint3(100*double(i+0.5)/h,100*double(j+0.5)/w,0)));
             }
         }
@@ -80,26 +89,65 @@ void map::generateWalls(){
 
     int last = 256;
     std::vector<DoublePoint3> mur;
+    DoublePoint3 ptemp;
+    DoublePoint3 pinter1;
+    DoublePoint3 pinter2;
 
     while(!Q.empty()){
      PointClasse p1 = Q.pop();
      if (p1.val==last-1){
          mur.push_back(p1.p);
+         float dist = sqrt(pow(p1.p.x() - ptemp.x(),2)+ pow(p1.p.y() - ptemp.y(),2));
+         for(int i = 0; i<dist/(8*kart_size)-1;i++){
+             pinter1 = DoublePoint3(ptemp.x()*(1-i)+p1.p.x()*(i),ptemp.y()*(1-i)+p1.p.y()*(i),0);
+             pinter2 = DoublePoint3(ptemp.x()*(1-i-1)+p1.p.x()*(i+1),ptemp.y()*(1-i-1)+p1.p.y()*(i+1),0);
+             DoublePoint3 seg[2] = {pinter1,pinter2};
+             compute_walls.push_back(seg);
+         }
+         DoublePoint3 seg[2] = {pinter2,p1.p};
+         compute_walls.push_back(seg);
+         ptemp=p1.p;
      }
      if (p1.val == last-2){
-         //On termine le mur précédent
+         //On genere le mesh à afficher
          int len = mur.size();
          DoublePoint3 MurTab[2*len];
          for(int i=0;i<len;i++){
              MurTab[i]=mur[i];
-             MurTab[(2*len)-1-i] = mur[i] + DoubleVector3(0,0,1); //Mettre un attribut quelque part pour la taille des murs
+             MurTab[(2*len)-1-i] = mur[i] + DoubleVector3(0,0,wallheight);
          }
-         Triangle T[2*(len-1)];
-         //Pas fini
+         Triangle *T=new Triangle[2*(len-1)];
+         for(int i = 0; i<len-1;i++){
+             T[2*i] = Triangle(i,i+1,(2*len)-1-i);
+             T[2*i+1] = Triangle((2*len)-1-i-1,i+1,(2*len)-1-i);
+         }
+         walls.push_back(Mesh(MurTab,2*len,T,2*(len-1)));
 
-
-     }
+         while(!mur.empty()){
+             mur.pop_back();
+         }
+         mur.push_back(p1.p);
+       }
+     ptemp = p1.p;
+     last = p1.val;
     }
+
+    //Generation du dernier mur;
+
+    int len = mur.size();
+    DoublePoint3 MurTab[2*len];
+    for(int i=0;i<len;i++){
+        MurTab[i]=mur[i];
+        MurTab[(2*len)-1-i] = mur[i] + DoubleVector3(0,0,wallheight);
+    }
+    Triangle *T=new Triangle[2*(len-1)];
+    for(int i = 0; i<len-1;i++){
+        T[2*i] = Triangle(i,i+1,(2*len)-1-i);
+        T[2*i+1] = Triangle((2*len)-1-i-1,i+1,(2*len)-1-i);
+    }
+    walls.push_back(Mesh(MurTab,2*len,T,2*(len-1)));
+
+    std::cout<<"In generateWalls() got : "<<walls.size()<<std::endl;
 }
 
 void map::set_start(){

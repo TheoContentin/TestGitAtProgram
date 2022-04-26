@@ -5,8 +5,8 @@ Kart::Kart(map map){
     pos = map.start_position;
     moteur = 0;
     dir = 0;
-    FloatPoint3 fB[8]={FloatPoint3(3,-1,-1),FloatPoint3(5,-1,-1),FloatPoint3(5,1,-1),FloatPoint3(3,1,-1),   // constructor (float)
-                       FloatPoint3(3,-1,1),FloatPoint3(5,-1,1),FloatPoint3(5,1,1),FloatPoint3(3,1,1)
+    FloatPoint3 fB[8]={FloatPoint3(pos.x(),pos.y(),0),FloatPoint3(pos.x()+map.kart_size,pos.y(),0),FloatPoint3(pos.x()+map.kart_size,pos.y()+map.kart_size,0),FloatPoint3(pos.x(),pos.y()+map.kart_size,0),   // constructor (float)
+                       FloatPoint3(pos.x(),pos.y(),map.kart_size),FloatPoint3(pos.x()+map.kart_size,pos.y(),map.kart_size),FloatPoint3(pos.x()+map.kart_size,pos.y()+map.kart_size,map.kart_size),FloatPoint3(pos.x(),pos.y()+map.kart_size,map.kart_size)
                       };
     for (int i=0;i<8;i++)
         fP[i] = fB[i];
