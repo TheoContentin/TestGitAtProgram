@@ -1,6 +1,7 @@
 #pragma once
 #include <Imagine/Images.h>
 #include "map.h"
+#include "mesh_3D.h"
 #include <cmath>
 
 using namespace Imagine;
@@ -12,8 +13,9 @@ public:
      int dir; //-1 si il tourne à gauche, 1 à droite, 0 tout droit
      int moteur; //1 si en marche, 0 sinon, -1 marche arriere
      Kart(map map);
-     FloatPoint3 fP[8];
-     void showCube();
+     Mesh bunny;
+     FVector<double,2> *fP;
+     void showKart();
      void depl();
      void updateKeys();
 };
