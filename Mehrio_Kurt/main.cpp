@@ -12,7 +12,7 @@ using namespace Imagine;
 int main(int argc, char** argv)
 {
     map carte("SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3_physics.png");
-    std::cout<<"Genéré la carte correctement"<<std::endl;
+    std::cout<<"Genere la carte correctement"<<std::endl;
     Kart kart(carte);
     Window glWindow = openWindow3D(512, 512, "3D Window");
     setActiveWindow(glWindow);

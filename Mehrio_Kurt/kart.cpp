@@ -8,6 +8,7 @@ Kart::Kart(map map){
     dir = 0;
     std::string fileName = srcPath("bunny.obj");
     readMesh(bunny, fileName);
+    bunny.setColor(Color(0,100,254));
     FloatPoint3 dist = bunny.vertices()[0] - map.start_position;
 
     FloatPoint3* depl=new FloatPoint3[bunny.vertices().size()];
@@ -37,7 +38,6 @@ Kart::Kart(map map){
     }
 }
 
-
 void Kart::showKart(){
     showMesh(bunny);
 }
@@ -54,7 +54,6 @@ void Kart::depl(){
         depl[i].y() += vit.y()*moteur;
     }
     bunny.setVertices(depl);
-    bunny.setColor(Color(0,100,254));
     showMesh(bunny,false); //false : pas de reset camera
     delete[] depl;
 
