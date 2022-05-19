@@ -25,6 +25,10 @@ Kart::Kart(map map){
             ymin=p.y();
         }
 
+        Hitbox[0] = FVector<double,3>(xmin,ymin,0);
+        Hitbox[1] = FVector<double,3>(xmax,ymin,0);
+        Hitbox[2] = FVector<double,3>(xmax,ymax,0);
+        Hitbox[3] = FVector<double,3>(xmin,ymax,0);
     }
 }
 
@@ -43,6 +47,10 @@ void Kart::depl(){
         depl[i] = bunny.vertices()[i];
         depl[i].x() += vit.x()*moteur;
         depl[i].y() += vit.y()*moteur;
+    }
+    for(int i =0;i<4;i++){
+        Hitbox[i].x() += vit.x()*moteur;
+        Hitbox[i].y() += vit.y()*moteur;
     }
     bunny.setVertices(depl);
     bunny.setColor(Color(0,100,254));

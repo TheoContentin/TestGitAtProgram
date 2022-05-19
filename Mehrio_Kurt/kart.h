@@ -14,7 +14,7 @@ public:
      int moteur; //1 si en marche, 0 sinon, -1 marche arriere
      Kart(map map);
      Mesh bunny;
-     FVector<double,2> *fP;
+     FVector<double,3> Hitbox[4];
      void showKart();
      void depl();
      void updateKeys();
