@@ -1,5 +1,6 @@
 #pragma once
 #include <Imagine/Images.h>
+#include "Imagine/LinAlg.h"
 
 using namespace Imagine;
 
@@ -28,7 +29,7 @@ public:
     map(char const * background_path,char const * texture_path,char const *physics);
     DoublePoint3 start_position;
     FloatVector3 start_direction;
-    std::vector<DoublePoint3[2]> compute_walls; // Liste des segments pour verifier les collisions.
+    std::vector<FVector<double,6>> compute_walls; // Liste des segments pour verifier les collisions. DoublePoint3[2] marche pas
     float kart_size;
     void draw();
 };
