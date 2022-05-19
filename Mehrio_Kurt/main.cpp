@@ -4,6 +4,8 @@
 #include <Imagine/Graphics.h>
 #include "map.h"
 #include "kart.h"
+#include "physics.h"
+
 using namespace Imagine;
 
 
@@ -19,6 +21,7 @@ int main(int argc, char** argv)
     std::cout<<"On rentre dans draw"<<std::endl;
     carte.draw();
     std::cout<<carte.start_position<<" ,"<<carte.start_direction <<std::endl;
+    run_physics(kart,carte);
     kart.showKart();
     std::cout<<"On sort de draw"<<std::endl;
     anyClick();

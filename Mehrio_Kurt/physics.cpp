@@ -33,4 +33,7 @@ void run_physics(Kart kart,map carte){
              //Traiter les collisions
             }
         }
-    }
+
+    kart.updateKeys();
+    kart.depl();
+}
