@@ -29,9 +29,8 @@ void run_physics(Kart kart,map carte){
     //Traitement des collisions
     for(int j; j< carte.compute_walls.size();j++){
         for(int i=0;i<4;i++){
-            if(collided(kart.fP[i],carte.compute_walls[j])){
+            //if(collided(kart.fP[i],carte.compute_walls[j])){
              //Traiter les collisions
             }
         }
     }
-}
