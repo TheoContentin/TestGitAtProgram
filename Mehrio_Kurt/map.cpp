@@ -4,7 +4,6 @@
 
 using namespace Imagine;
 
-
 map::map(char const *background_path,char const *texture_path, char const *physics_path){
 
     if(! load(background, stringSrcPath( background_path ))){
@@ -23,6 +22,8 @@ map::map(char const *background_path,char const *texture_path, char const *physi
     axe3 = FloatVector3(0,0,1);
 
     wallheight = 1;
+    kart_size =1;
+
 
     // Generation de la texture du sol;
     int h=texture.size(0);
@@ -87,7 +88,7 @@ void map::generateWalls(){
         }
     }
 
-    int last = 256;
+    int last = 255;
     std::vector<DoublePoint3> mur;
     DoublePoint3 ptemp;
     DoublePoint3 pinter1;
@@ -96,15 +97,22 @@ void map::generateWalls(){
     while(!Q.empty()){
      PointClasse p1 = Q.pop();
      if (p1.val==last-1){
+         std::cout<<p1.val<<" "<<last-1<<std::endl;
          mur.push_back(p1.p);
          float dist = sqrt(pow(p1.p.x() - ptemp.x(),2)+ pow(p1.p.y() - ptemp.y(),2));
+         std::cout<<dist<<std::endl;
+         std::cout<<dist/(8*kart_size)-1<<std::endl;
+
          for(int i = 0; i<dist/(8*kart_size)-1;i++){
              pinter1 = DoublePoint3(ptemp.x()*(1-i)+p1.p.x()*(i),ptemp.y()*(1-i)+p1.p.y()*(i),0);
              pinter2 = DoublePoint3(ptemp.x()*(1-i-1)+p1.p.x()*(i+1),ptemp.y()*(1-i-1)+p1.p.y()*(i+1),0);
-             DoublePoint3 seg[2] = {pinter1,pinter2};
+             double vals[] ={pinter2.x(),pinter2.y(),pinter2.z(),pinter1.x(),pinter1.y(),pinter1.z()};
+             FVector<double,6> seg(vals);
+             std::cout<<"Pushing segment :"<<compute_walls.size()<<std::endl;
              compute_walls.push_back(seg);
          }
-         DoublePoint3 seg[2] = {pinter2,p1.p};
+         double vals[] = {pinter2.x(),pinter2.y(),pinter2.z(),p1.p.x(),p1.p.y(),p1.p.z()};
+         FVector<double,6> seg(vals);
          compute_walls.push_back(seg);
          ptemp=p1.p;
      }
