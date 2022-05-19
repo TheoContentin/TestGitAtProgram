@@ -27,6 +27,7 @@ Kart::Kart(map map){
     DoublePoint3 axis(1,0,0);
     rotate_mesh3d(bunny,axis,-M_PI/2);
 
+    bunny.setColor(Color(0,100,254));
     FloatPoint3 dist = bunny.vertices()[0] - map.start_position;
 
     FloatPoint3* depl=new FloatPoint3[bunny.vertices().size()];
@@ -59,7 +60,6 @@ Kart::Kart(map map){
         Hitbox[3] = FVector<double,3>(xmin,ymax,0);
     }
 }
-
 
 void Kart::showKart(){
     showMesh(bunny);
@@ -138,6 +138,3 @@ void Kart::MoveCamera(){
     DoubleVector3 dir(vit.normalize().x(),vit.normalize().y(),-0.3);
     setCamera(pos,-20*dir,DoubleVector3(0,0,1));
 }
-
-
-
