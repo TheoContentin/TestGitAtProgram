@@ -7,6 +7,15 @@ Kart::Kart(map map){
     dir = 0;
     std::string fileName = srcPath("bunny.obj");
     readMesh(bunny, fileName);
+    FloatPoint3 dist = bunny.vertices()[0] - map.start_position;
+
+    FloatPoint3* depl=new FloatPoint3[bunny.vertices().size()];
+    for (int i=0; i<bunny.vertices().size(); i++){
+        depl[i] = bunny.vertices()[i];
+        depl[i] = depl[i] - dist;
+    }
+    bunny.setVertices(depl);
+    delete[] depl;
 }
 
 void Kart::showKart(){
@@ -27,7 +36,6 @@ void Kart::depl(){
     bunny.setVertices(depl);
     bunny.setColor(Color(0,100,254));
     showMesh(bunny,false); //false : pas de reset camera
-    endGraphics();
     delete[] depl;
 
 }
