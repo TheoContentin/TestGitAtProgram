@@ -34,4 +34,6 @@ void run_physics(Kart kart,map carte){
             }
         }
     }
+    kart.updateKeys();
+    kart.depl();
 }

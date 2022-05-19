@@ -1,5 +1,6 @@
 #include "kart.h"
 
+
 Kart::Kart(map map){
     vit = {map.start_direction[0],map.start_direction[1]};
     pos = map.start_position;
@@ -19,6 +20,7 @@ void Kart::showCube(){
                     };
     Mesh fM(fP,8,fT,12);
     showMesh(fM);
+    //setCamera(pos+DoublePoint3(0,0,1)-3*(vit.normalize()))
 }
 
 void Kart::depl(){
@@ -33,6 +35,39 @@ void Kart::depl(){
 }
 
 void Kart::updateKeys(){
+    Event ev;
+    do{
+    getEvent(500,ev);
+    if(ev.type==EVT_KEY_ON){
+        if(ev.key == 'I'){
+            moteur=1;
+        }
+        if(ev.key == 'K'){
+            moteur=-1;
+        }
+        if(ev.key == 'J'){
+            dir = -1;
+        }
+        if(ev.key == 'L'){
+            dir = 1;
+        }
+    }
 
+    if(ev.type==EVT_KEY_OFF){
+        if((ev.key == 'I')&&(moteur==1)){
+            moteur=0;
+        }
+        if((ev.key == 'K')&&(moteur==-1)){
+            moteur=0;
+        }
+        if((ev.key == 'J')&&(dir==-1)){
+            dir = 0;
+        }
+        if((ev.key == 'L')&&(dir==1)){
+            dir = 0;
+        }
+    }
+
+    }while(ev.type!=EVT_NONE);
 }
 
