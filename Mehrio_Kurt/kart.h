@@ -1,5 +1,5 @@
 #pragma once
-#include <Imagine/Images.h>
+#include <Imagine/Graphics.h>
 #include "map.h"
 #include "mesh_3D.h"
 #include <cmath>
@@ -18,4 +18,5 @@ public:
      void showKart();
      void depl();
      void updateKeys();
+     void MoveCamera();
 };

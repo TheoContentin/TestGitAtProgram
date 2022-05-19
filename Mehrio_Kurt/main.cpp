@@ -23,7 +23,13 @@ int main(int argc, char** argv)
     std::cout<<carte.start_position<<" ,"<<carte.start_direction <<std::endl;
     run_physics(kart,carte);
     kart.showKart();
+    kart.MoveCamera();
     std::cout<<"On sort de draw"<<std::endl;
+    for(int i=0;i<500;i++){
+        milliSleep(1000);
+        run_physics(kart,carte);
+        std::cout<<kart.pos<<std::endl;
+    }
     anyClick();
     closeWindow(glWindow);
     endGraphics();

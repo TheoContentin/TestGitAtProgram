@@ -6,4 +6,4 @@
 #include "kart.h"
 #include <cmath>
 
-void run_physics(Kart kart,map carte);
+void run_physics(Kart &kart,map carte);

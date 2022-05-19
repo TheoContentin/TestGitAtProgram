@@ -1,5 +1,7 @@
 #include "physics.h"
 
+#include "Imagine/LinAlg.h"
+
 using namespace Imagine;
 
 bool collided(FloatPoint3 corner, FVector<double,6> seg){
@@ -14,7 +16,7 @@ bool collided(FloatPoint3 corner, FVector<double,6> seg){
     // On projette alors sur le vecteur directeur du segment.
 
     DoublePoint3 vect = corner - seg0;
-    DoublePoint3 normalvector = DoublePoint3((seg1-seg0).y(),-(seg1-seg0).x());
+    DoublePoint3 normalvector = DoublePoint3((seg1-seg0).y(),-(seg1-seg0).x(),0);
     float scal =  (vect.x()*v.x() +vect.y()*v.y())/len;
     if (scal/len<1 && scal/len>0){
         float nscal = (vect.x()*normalvector.x() +vect.y()*normalvector.y())/len;
@@ -25,16 +27,23 @@ bool collided(FloatPoint3 corner, FVector<double,6> seg){
     return false;
 }
 
-void run_physics(Kart kart,map carte){
+void run_physics(Kart &kart,map carte){
     //Traitement des collisions
-    for(int j; j< carte.compute_walls.size();j++){
+    for(int j=0; j< carte.compute_walls.size();j++){
+        //std::cout<<"Mur testé: "<<j<<std::endl;
         for(int i=0;i<4;i++){
             if(collided(kart.Hitbox[i],carte.compute_walls[j])){
              //Traiter les collisions
+                }
             }
         }
 
+    std::cout<<"Getting Keys"<<std::endl;
     kart.updateKeys();
     kart.depl();
-    }
+    std::cout<<"Moving Camera"<<std::endl;
+    kart.MoveCamera();
+    std::cout<<kart.pos<<std::endl;
 }
+
+

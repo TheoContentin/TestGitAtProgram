@@ -31,7 +31,7 @@ map::map(char const *background_path,char const *texture_path, char const *physi
     DoublePoint3 *P=new DoublePoint3[(w+1)*(h+1)];
     for (int j=0;j<=w;j++)
         for (int i=0;i<=h;i++)
-            P[i+(h+1)*j]=DoublePoint3(100*double(i)/h,100*double(j)/w,0);   // A flat surface to texture
+            P[i+(h+1)*j]=DoublePoint3(100*double(j)/w,100*double(i)/h,0);   // A flat surface to texture
     Triangle *T=new Triangle[2*(h)*(w)];
     for (int j=0;j<w;j++) {
         for (int i=0;i<h;i++) {
@@ -83,12 +83,12 @@ void map::generateWalls(){
             b = physics(i,j).b();
             if((b==0) &&(g==0)){
                 std::cout<<"Premier point : "<<r<<std::endl;
-                Q.push(PointClasse(r,DoublePoint3(100*double(i+0.5)/h,100*double(j+0.5)/w,0)));
+                Q.push(PointClasse(r,DoublePoint3(100*double(j+0.5)/w,100*double(i+0.5)/h,0)));
             }
         }
     }
 
-    int last = 255;
+    int last = 256;
     std::vector<DoublePoint3> mur;
     DoublePoint3 ptemp;
     DoublePoint3 pinter1;
@@ -166,10 +166,10 @@ void map::set_start(){
     for (int j=0;j<w;j++) {
         for (int i=0;i<h;i++) {
             if(physics(i,j)==Color(0,248,0)){
-                start_position=DoublePoint3(100*double(i+0.5)/h,100*double(j+0.5)/w,0);
+                start_position=DoublePoint3(100*double(j+0.5)/w,100*double(i+0.5)/h,0);
             }
             if(physics(i,j)==Color(0,128,0)){
-                Lookat=DoublePoint3(100*double(i+0.5)/h,100*double(j+0.5)/w,0);
+                Lookat=DoublePoint3(100*double(j+0.5)/w,100*double(i+0.5)/h,0);
             }
         }
     }

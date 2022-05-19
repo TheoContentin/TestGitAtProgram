@@ -1,5 +1,20 @@
 #include "kart.h"
 
+void rotate_mesh3d(Mesh &Mymesh, DoublePoint3 Axis, double angle){
+    DoublePoint3 axe = Axis.normalize();
+    float c = cos(angle);
+    float s = sin(angle);
+
+    FloatPoint3* depl=new FloatPoint3[Mymesh.vertices().size()];
+    for(int i = 0; i< Mymesh.vertices().size();i++){
+        depl[i].x() = (axe.x()*axe.x()*(1-c) + c)*Mymesh.vertices()[i].x() + ((axe.x()*axe.y()*(1-c)) - s*axe.z())*Mymesh.vertices()[i].y() + (axe.x()*axe.z()*(1-c) + s*axe.y())*Mymesh.vertices()[i].z();
+        depl[i].y() = (axe.x()*axe.y()*(1-c) + axe.z()*s)*Mymesh.vertices()[i].x() + ((axe.y()*axe.y()*(1-c)) + c)*Mymesh.vertices()[i].y() + (axe.y()*axe.z()*(1-c) - s*axe.x())*Mymesh.vertices()[i].z();
+        depl[i].z() = (axe.x()*axe.z()*(1-c) - axe.y()*s)*Mymesh.vertices()[i].x() + ((axe.z()*axe.y()*(1-c)) - s*axe.x())*Mymesh.vertices()[i].y() + (axe.z()*axe.z()*(1-c) + c)*Mymesh.vertices()[i].z();
+    }
+
+    Mymesh.setVertices(depl);
+    delete[] depl;
+}
 
 Kart::Kart(map map){
     vit = {map.start_direction[0],map.start_direction[1]};
@@ -8,6 +23,10 @@ Kart::Kart(map map){
     dir = 0;
     std::string fileName = srcPath("bunny.obj");
     readMesh(bunny, fileName);
+
+    DoublePoint3 axis(1,0,0);
+    rotate_mesh3d(bunny,axis,-M_PI/2);
+
     FloatPoint3 dist = bunny.vertices()[0] - map.start_position;
 
     FloatPoint3* depl=new FloatPoint3[bunny.vertices().size()];
@@ -61,9 +80,12 @@ void Kart::depl(){
         Hitbox[i].x() += vit.x()*moteur;
         Hitbox[i].y() += vit.y()*moteur;
     }
+    std::cout<<"Moving position: "<< pos ;
+    pos.x() += vit.x()*moteur;
+    pos.y() += vit.y()*moteur;
+    std::cout<<" "<<pos<<std::endl;
     bunny.setVertices(depl);
     bunny.setColor(Color(0,100,254));
-    showMesh(bunny,false); //false : pas de reset camera
     delete[] depl;
 
 }
@@ -71,37 +93,51 @@ void Kart::depl(){
 void Kart::updateKeys(){
     Event ev;
     do{
-    getEvent(500,ev);
+    getEvent(0,ev);
+    std::cout<<"Got event: "<<ev.type<<ev.key<<std::endl;
     if(ev.type==EVT_KEY_ON){
-        if(ev.key == 'I'){
+        std::cout<<"On detecte une touche allumé"<<std::endl;
+        if(ev.key == 'i'){
             moteur=1;
         }
-        if(ev.key == 'K'){
+        if(ev.key == 'k'){
             moteur=-1;
         }
-        if(ev.key == 'J'){
+        if(ev.key == 'j'){
             dir = -1;
         }
-        if(ev.key == 'L'){
+        if(ev.key == 'l'){
             dir = 1;
         }
     }
 
     if(ev.type==EVT_KEY_OFF){
-        if((ev.key == 'I')&&(moteur==1)){
+        std::cout<<"On detecte une touche eteinte"<<std::endl;
+        if((ev.key == 'i')&&(moteur==1)){
             moteur=0;
         }
-        if((ev.key == 'K')&&(moteur==-1)){
+        if((ev.key == 'k')&&(moteur==-1)){
             moteur=0;
         }
-        if((ev.key == 'J')&&(dir==-1)){
+        if((ev.key == 'j')&&(dir==-1)){
             dir = 0;
         }
-        if((ev.key == 'L')&&(dir==1)){
+        if((ev.key == 'l')&&(dir==1)){
             dir = 0;
         }
     }
 
+
+
+
     }while(ev.type!=EVT_NONE);
 }
+
+void Kart::MoveCamera(){
+    std::cout<<pos<<std::endl;
+    DoubleVector3 dir(vit.normalize().x(),vit.normalize().y(),-0.3);
+    setCamera(pos,-20*dir,DoubleVector3(0,0,1));
+}
+
+
 
