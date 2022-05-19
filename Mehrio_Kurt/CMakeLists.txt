@@ -7,6 +7,6 @@ find_package(Imagine REQUIRED)
 project(MehrioKurt)
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(MehrioKurt test.cpp main.cpp asset.cpp asset.h map.cpp map.h physics.cpp physics.h kart.cpp kart.h)
+add_executable(MehrioKurt test.cpp main.cpp asset.cpp asset.h map.cpp map.h physics.cpp physics.h kart.cpp kart.h mesh_3D.cpp mesh_3D.h)
 ImagineUseModules(MehrioKurt Graphics)
 ImagineUseModules(MehrioKurt Images)
