@@ -46,7 +46,7 @@ void Kart::depl(){
     }
     bunny.setVertices(depl);
     bunny.setColor(Color(0,100,254));
-    showMesh(bunny,false);
+    showMesh(bunny,false); //false : pas de reset camera
     endGraphics();
     delete[] depl;
 

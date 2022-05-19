@@ -21,9 +21,8 @@ int main(int argc, char** argv)
     std::cout<<"On rentre dans draw"<<std::endl;
     carte.draw();
     std::cout<<carte.start_position<<" ,"<<carte.start_direction <<std::endl;
-    kart.showCube();
     run_physics(kart,carte);
-
+    kart.showKart();
     std::cout<<"On sort de draw"<<std::endl;
     anyClick();
     closeWindow(glWindow);
