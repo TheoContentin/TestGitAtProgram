@@ -17,8 +17,10 @@ void rotate_mesh3d(Mesh &Mymesh, DoublePoint3 Axis, double angle){
 }
 
 Kart::Kart(map map){
-    vit = {map.start_direction[0],map.start_direction[1]};
+    vit = {map.start_direction[0]/map.dt,map.start_direction[1]/map.dt};
     pos = map.start_position;
+    orient = {map.start_direction[0],map.start_direction[1]};
+    targ_vit = {0,0};
     moteur = 0;
     dir = 0;
     std::string fileName = srcPath("bunny.obj");
@@ -67,8 +69,10 @@ void Kart::showKart(){
 
 void Kart::depl(){
     double angle = dir*0.5;
-    vit.x() = vit.x()*cos(angle)-1*sin(angle)*vit.y();
-    vit.y() = vit.x()*sin(angle) + vit.y()*cos(angle);
+    targ_vit.x() = orient.x()*cos(angle)-1*sin(angle)*orient.y();
+    targ_vit.y() = orient.x()*sin(angle) + orient.y()*cos(angle);
+
+    Turn();
 
     FloatPoint3* depl=new FloatPoint3[bunny.vertices().size()];
     for (int i=0; i<bunny.vertices().size(); i++){
@@ -137,4 +141,7 @@ void Kart::MoveCamera(){
     std::cout<<pos<<std::endl;
     DoubleVector3 dir(vit.normalize().x(),vit.normalize().y(),-0.3);
     setCamera(pos,-20*dir,DoubleVector3(0,0,1));
+}
+
+void Kart::Turn(){
 }
