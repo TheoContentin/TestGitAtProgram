@@ -12,14 +12,30 @@ void rotate_mesh3d(Mesh &Mymesh, DoublePoint3 Axis, double angle){
         depl[i].z() = (axe.x()*axe.z()*(1-c) - axe.y()*s)*Mymesh.vertices()[i].x() + ((axe.z()*axe.y()*(1-c)) - s*axe.x())*Mymesh.vertices()[i].y() + (axe.z()*axe.z()*(1-c) + c)*Mymesh.vertices()[i].z();
     }
 
+    std::cout<<depl<<std::endl;
+
+    Mymesh.setVertices(depl);
+    delete[] depl;
+}
+
+void rotate_mesh2d(Mesh &Mymesh, FVector<float,3> pos,float angle){
+    FloatPoint3* depl = new FloatPoint3[Mymesh.vertices().size()];
+    for(int i=0; i<Mymesh.vertices().size(); i++){
+        depl[i].x() = pos[0] + cos(angle)*(Mymesh.vertices()[i].x()-pos[0]) - sin(angle)*(Mymesh.vertices()[i].y()-pos[1]);
+        depl[i].y() = pos[1] + sin(angle)*(Mymesh.vertices()[i].x()-pos[0]) + cos(angle)*(Mymesh.vertices()[i].y()-pos[1]);
+        depl[i].z() = Mymesh.vertices()[i].z();
+    }
+
     Mymesh.setVertices(depl);
     delete[] depl;
 }
 
 Kart::Kart(map map){
-    vit = {map.start_direction[0]/map.dt,map.start_direction[1]/map.dt};
+    vit = {0,float(atan2(map.start_direction[1],map.start_direction[0]))};
+    vnorm = 0;
     pos = map.start_position;
-    orient = {map.start_direction[0],map.start_direction[1]};
+    orient = {1/map.dt,float(atan2(map.start_direction[1],map.start_direction[0]))};
+    prevangle = orient[1];
     targ_vit = {0,0};
     moteur = 0;
     dir = 0;
@@ -68,29 +84,46 @@ void Kart::showKart(){
 }
 
 void Kart::depl(){
-    double angle = dir*0.5;
-    targ_vit.x() = orient.x()*cos(angle)-1*sin(angle)*orient.y();
-    targ_vit.y() = orient.x()*sin(angle) + orient.y()*cos(angle);
 
-    Turn();
+    if(moteur == 1){
+        targ_vit = orient;
+    }
+    if(moteur ==-1){
+        targ_vit[0] = -orient[0];
+        targ_vit[1] =  orient[1];
+    }
+    if(moteur == 0 ){
+        targ_vit[0] = 0;
+        targ_vit[1] = orient[1];
+    }
+
+    double angle = -dir*0.7; //L'angle est en radians ca fait 40 degres
+    targ_vit[1] += angle;
+
+    VitTurn();
+    accel();
 
     FloatPoint3* depl=new FloatPoint3[bunny.vertices().size()];
     for (int i=0; i<bunny.vertices().size(); i++){
         depl[i] = bunny.vertices()[i];
-        depl[i].x() += vit.x()*moteur;
-        depl[i].y() += vit.y()*moteur;
+        depl[i].x() += vit[0]*cos(vit[1]);
+        depl[i].y() += vit[0]*sin(vit[1]);
     }
     for(int i =0;i<4;i++){
-        Hitbox[i].x() += vit.x()*moteur;
-        Hitbox[i].y() += vit.y()*moteur;
+        Hitbox[i].x() += vit[0]*cos(vit[1]);
+        Hitbox[i].y() += vit[0]*sin(vit[1]);
     }
-    std::cout<<"Moving position: "<< pos ;
-    pos.x() += vit.x()*moteur;
-    pos.y() += vit.y()*moteur;
+    pos.x() += vit[0]*cos(vit[1]);
+    pos.y() += vit[0]*sin(vit[1]);
+
+
     std::cout<<" "<<pos<<std::endl;
     bunny.setVertices(depl);
     bunny.setColor(Color(0,100,254));
     delete[] depl;
+
+    rotate_mesh2d(bunny,pos,orient[1]-prevangle);
+    prevangle = orient[1];
 
 }
 
@@ -116,7 +149,6 @@ void Kart::updateKeys(){
     }
 
     if(ev.type==EVT_KEY_OFF){
-        std::cout<<"On detecte une touche eteinte"<<std::endl;
         if((ev.key == 'i')&&(moteur==1)){
             moteur=0;
         }
@@ -131,17 +163,22 @@ void Kart::updateKeys(){
         }
     }
 
-
-
-
     }while(ev.type!=EVT_NONE);
 }
 
 void Kart::MoveCamera(){
-    std::cout<<pos<<std::endl;
-    DoubleVector3 dir(vit.normalize().x(),vit.normalize().y(),-0.3);
-    setCamera(pos,-20*dir,DoubleVector3(0,0,1));
+    //std::cout<<pos<<std::endl;
+    DoubleVector3 cam(cos(orient[1]),sin(orient[1]),-0.3);
+    setCamera(pos,-20*cam,DoubleVector3(0,0,1));
 }
 
-void Kart::Turn(){
+void Kart::VitTurn(){
+
+    vit[1] += (targ_vit[1]-vit[1])/10;
+    orient[1] += (vit[1]-orient[1])/11;
+}
+void Kart::accel(){
+
+    vit[0] += 0.4*(targ_vit[0]-vit[0]);
+    std::cout<<vnorm<<std::endl;
 }

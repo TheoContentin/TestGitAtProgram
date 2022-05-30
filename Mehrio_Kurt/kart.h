@@ -9,9 +9,11 @@ using namespace Imagine;
 class Kart{
 public:
      FVector<float, 3> pos;
-     FVector<float, 2> vit;
-     FVector<float, 2> targ_vit;
-     FVector<float, 2> orient;
+     FVector<float, 2> vit; //vitesse en polaire
+     float vnorm;
+     FVector<float, 2> targ_vit; //Vitesse voulue en polaire
+     FVector<float, 2> orient; //Orientation du kart en polaire
+     float prevangle;
      int dir; //-1 si il tourne à gauche, 1 à droite, 0 tout droit
      int moteur; //1 si en marche, 0 sinon, -1 marche arriere
      Kart(map map);
@@ -21,5 +23,6 @@ public:
      void depl();
      void updateKeys();
      void MoveCamera();
-     void Turn();
+     void VitTurn();
+     void accel();
 };

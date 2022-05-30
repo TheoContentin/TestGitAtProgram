@@ -33,7 +33,8 @@ void run_physics(Kart &kart,map carte){
         //std::cout<<"Mur testé: "<<j<<std::endl;
         for(int i=0;i<4;i++){
             if(collided(kart.Hitbox[i],carte.compute_walls[j])){
-             //Traiter les collisions
+                //kart.vit[0] *= cos(kart.vit[1]-atan2(carte.compute_walls[j][1]-carte.compute_walls[j][4],carte.compute_walls[j][0]-carte.compute_walls[j][3]));
+                //kart.vit[1] = atan2(carte.compute_walls[j][1]-carte.compute_walls[j][4],carte.compute_walls[j][0]-carte.compute_walls[j][3]);
                 }
             }
         }

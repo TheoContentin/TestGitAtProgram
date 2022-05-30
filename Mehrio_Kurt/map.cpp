@@ -23,7 +23,7 @@ map::map(char const *background_path,char const *texture_path, char const *physi
 
     wallheight = 1;
     kart_size =1;
-    dt = 0.1;
+    dt = 3;
 
     // Generation de la texture du sol;
     int h=texture.size(0);

@@ -70,9 +70,8 @@ int main(int argc, char** argv)
     kart.MoveCamera();
     std::cout<<"On sort de draw"<<std::endl;
     for(int i=0;i<25000;i++){
-        milliSleep(10);
+        milliSleep(50);
         run_physics(kart,carte);
-        std::cout<<kart.pos<<std::endl;
     }
     anyClick();
     closeWindow(glWindow);
