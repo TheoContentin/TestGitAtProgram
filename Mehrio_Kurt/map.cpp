@@ -32,29 +32,29 @@ map::map(char const *background_path,char const *texture_path, char const *physi
     for (int j=0;j<=w;j++)
         for (int i=0;i<=h;i++)
             P[i+(h+1)*j]=DoublePoint3(100*double(j)/w,100*double(i)/h,0);   // A flat surface to texture
-    Triangle *T=new Triangle[2*(h)*(w)];
+    Quad *T=new Quad[(h)*(w)];
     for (int j=0;j<w;j++) {
         for (int i=0;i<h;i++) {
-            T[2*(i+(h)*j)]=Triangle(i+(h+1)*j,i+1+(h+1)*j,i+(h+1)*(j+1));
-            T[2*(i+(h)*j)+1]=Triangle(i+1+(h+1)*j,i+1+(h+1)*(j+1),i+(h+1)*(j+1));
+            T[(i+(h)*j)]=Quad(i+(h+1)*j,i+1+(h+1)*j,i+1+(h+1)*(j+1),i+(h+1)*(j+1));
+            //T[2*(i+(h)*j)+1]=Triangle(i+1+(h+1)*j,i+1+(h+1)*(j+1),i+(h+1)*(j+1));
         }
     }
     std::cout<<"Triangle Ok"<<std::endl;
 
     std::cout<<"Quad Ok"<<std::endl;
 
-    Plane = Mesh(P,(w+1)*(h+1),T,2*h*w,0,0,FACE_COLOR,SMOOTH_SHADING);
+    Plane = Mesh(P,(w+1)*(h+1),0,0,T,w*h,FACE_COLOR,FLAT_SHADING);
     std::cout<<"Mesh Ok"<<std::endl;
 
-    Color *col=new Color[2*w*h];
+    Color *col=new Color[w*h];
     for (int j=0;j<w;j++) {
         for (int i=0;i<h;i++) {
-            col[2*(i+(h*j))]=texture(i,j);
-            col[2*(i+h*j)+1]=texture(i,j);
+            col[(i+(h*j))]=texture(i,j);
+            //col[2*(i+h*j)+1]=texture(i,j);
         }
     }
 
-    Plane.setColors(TRIANGLE,col);
+    Plane.setColors(QUAD,col);
 
     std::cout<<"Colors Ok"<<std::endl;
     generateWalls();
