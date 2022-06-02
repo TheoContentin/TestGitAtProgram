@@ -29,15 +29,15 @@ bool collided(FloatPoint3 corner, FVector<double,6> seg){
 
 void run_physics(Kart &kart,map carte){
     //Traitement des collisions
-    for(int j=0; j< carte.compute_walls.size();j++){
+    //for(int j=0; j< carte.compute_walls.size();j++){
         //std::cout<<"Mur testé: "<<j<<std::endl;
-        for(int i=0;i<4;i++){
-            if(collided(kart.Hitbox[i],carte.compute_walls[j])){
+        //for(int i=0;i<4;i++){
+            //if(collided(kart.Hitbox[i],carte.compute_walls[j])){
                 //kart.vit[0] *= cos(kart.vit[1]-atan2(carte.compute_walls[j][1]-carte.compute_walls[j][4],carte.compute_walls[j][0]-carte.compute_walls[j][3]));
                 //kart.vit[1] = atan2(carte.compute_walls[j][1]-carte.compute_walls[j][4],carte.compute_walls[j][0]-carte.compute_walls[j][3]);
-                }
-            }
-        }
+                //}
+            //}
+        //}
 
     std::cout<<"Getting Keys"<<std::endl;
     kart.updateKeys();

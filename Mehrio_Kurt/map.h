@@ -31,7 +31,7 @@ public:
     DoublePoint3 start_position;
     FloatVector3 start_direction;
     float dt;
-    std::vector<FVector<double,6>> compute_walls; // Liste des segments pour verifier les collisions. DoublePoint3[2] marche pas
+    std::vector<FVector<DoublePoint3,2>> compute_walls; // Liste des segments pour verifier les collisions. DoublePoint3[2] marche pas
     float kart_size;
     void draw();
 };
