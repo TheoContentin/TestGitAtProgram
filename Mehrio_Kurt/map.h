@@ -14,6 +14,8 @@ private:
 
     DoublePoint3 center;
     Mesh Plane;
+    Mesh Sky;
+    Mesh Sol;
     bool active;
     std::vector<Mesh> walls; // La liste des objets Mesh à afficher.
     FloatVector3 axe1, axe2, axe3;

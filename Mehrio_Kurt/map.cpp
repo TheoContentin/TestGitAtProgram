@@ -60,6 +60,39 @@ map::map(char const *background_path,char const *texture_path, char const *physi
     generateWalls();
     set_start();
 
+    // Generation ciel
+    DoublePoint3 *P_sky=new DoublePoint3[8];
+    P_sky[0] = {500,500,10};
+    P_sky[1] = {500,-500,10};
+    P_sky[2] = {-500,-500,10};
+    P_sky[3] = {-500,500,10};
+    for (int i=0; i<4; i++)
+        P_sky[4+i] = {P_sky[i].x(),P_sky[i].y(), P_sky[i].z()-50};
+
+    Quad *Q_sky = new Quad[5];
+    Q_sky[0] = Quad(0,1,2,3);
+    Q_sky[1] = Quad(0,4,7,3);
+    Q_sky[2] = Quad(0,4,5,1);
+    Q_sky[3] = Quad(1,5,6,2);
+    Q_sky[4] = Quad(2,6,7,3);
+
+    Sky = Mesh(P_sky,8,0,0,Q_sky,5,CONSTANT_COLOR,FLAT_SHADING);
+    Color *col_sky = new Color[5];
+    for (int i=0; i<5; i++)
+        col_sky[i] = BLUE;
+    Sky.setColors(QUAD,col_sky);
+
+    // Generation fond
+    DoublePoint3 *P_sol=new DoublePoint3[4];
+    for (int i=0; i<4; i++)
+        P_sol[i] = P_sky[i+4];
+
+
+    Quad *Q_sol = new Quad[1];
+    Q_sol[0] = Quad(0,1,2,3);
+    Sol = Mesh(P_sol,4,0,0,Q_sol,1,CONSTANT_COLOR,FLAT_SHADING);
+    Sol.setColor(GREEN);
+
 }
 
 void map::draw(){
@@ -67,6 +100,8 @@ void map::draw(){
     for(int i = 0;i<walls.size();i++){
         showMesh(walls[i]);
     }
+    showMesh(Sky);
+    showMesh(Sol);
 }
 
 void map::generateWalls(){
