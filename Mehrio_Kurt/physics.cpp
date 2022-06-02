@@ -51,14 +51,14 @@ void run_physics(Kart &kart,map carte){
         //std::cout<<"Mur testé: "<<j<<std::endl;
         if(collided(kart.Hitbox,carte.compute_walls[j])){
                 double angle;
-                angle = atan2((carte.compute_walls[j][1]-carte.compute_walls[j][0]).y(),(carte.compute_walls[j][1]-carte.compute_walls[j][0]).x())+(2*M_PI) - kart.vit[1];
+                angle = 2*(atan2((carte.compute_walls[j][1]-carte.compute_walls[j][0]).y(),(carte.compute_walls[j][1]-carte.compute_walls[j][0]).x())+(2*M_PI) - kart.vit[1]);
                 while(angle <M_PI){
                     angle += 2*M_PI;
                 }
                 while(angle >M_PI){
                     angle += -2*M_PI;
                 }
-                kart.vit[1] =  kart.vit[1] + 2*angle;
+                kart.vit[1] =  kart.vit[1] + angle;
             std::cout<<"Collided with wall "<<j<<std::endl;
         }
     }
