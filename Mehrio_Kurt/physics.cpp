@@ -4,45 +4,69 @@
 
 using namespace Imagine;
 
-bool collided(FloatPoint3 corner, FVector<double,6> seg){
+bool collided(FVector<FVector<double,3>,4> Hitbox, FVector<DoublePoint3,2> seg){
 
-    DoublePoint3 seg0(seg[0],seg[1],seg[2]);
-    DoublePoint3 seg1(seg[3],seg[4],seg[5]);
+    FVector<double,3> tangent = (seg[1]-seg[0]).normalize();
+    FVector<double,3> normal = {tangent.y(),-tangent.x(),0};
 
-    //On regarde si un point est dans le carré à droite du segemnt orienté donné
-    DoublePoint3 v = seg1-seg0;
-    float len = sqrt(pow(v.x(),2)+ pow(v.y(),2));
 
-    // On projette alors sur le vecteur directeur du segment.
+    //std::cout<<"Computing tangents for points " <<Hitbox[0]<<Hitbox[1]<<Hitbox[2]<<Hitbox[3]<<seg<<std::endl;
 
-    DoublePoint3 vect = corner - seg0;
-    DoublePoint3 normalvector = DoublePoint3((seg1-seg0).y(),-(seg1-seg0).x(),0);
-    float scal =  (vect.x()*v.x() +vect.y()*v.y())/len;
-    if (scal/len<1 && scal/len>0){
-        float nscal = (vect.x()*normalvector.x() +vect.y()*normalvector.y())/len;
-        if(nscal/len <1 && nscal/len>0){
+
+    int sign = 0;
+    bool crossing = false;
+    for(int i = 0;i<4;i++){
+        DoublePoint3 v =  Hitbox[i]-seg[0];
+        double dot_product = v.x()*normal.x() + v.y()*normal.y();
+        if(dot_product*sign>=0){
+            sign = (dot_product > 0) - (dot_product < 0);
+        }
+        else{
+            crossing =true;
+        }
+    }
+
+    double seg_len = sqrt(pow(seg[1].x()-seg[0].x(),2)+pow(seg[1].y()-seg[0].y(),2));
+
+    if (crossing){
+        int count = 0;
+        for(int i = 0;i<4;i++){
+            DoublePoint3 v =  Hitbox[i]-seg[0];
+            double dot_product = v.x()*tangent.x() + v.y()*tangent.y();
+            if((dot_product<=seg_len)&&(dot_product>=0)){
+                count +=1;
+            }
+        }
+        if(count>1){
             return true;
         }
+
     }
     return false;
 }
 
 void run_physics(Kart &kart,map carte){
     //Traitement des collisions
-    //for(int j=0; j< carte.compute_walls.size();j++){
+    for(int j=0; j< carte.compute_walls.size();j++){
         //std::cout<<"Mur testé: "<<j<<std::endl;
-        //for(int i=0;i<4;i++){
-            //if(collided(kart.Hitbox[i],carte.compute_walls[j])){
-                //kart.vit[0] *= cos(kart.vit[1]-atan2(carte.compute_walls[j][1]-carte.compute_walls[j][4],carte.compute_walls[j][0]-carte.compute_walls[j][3]));
-                //kart.vit[1] = atan2(carte.compute_walls[j][1]-carte.compute_walls[j][4],carte.compute_walls[j][0]-carte.compute_walls[j][3]);
-                //}
-            //}
-        //}
+        if(collided(kart.Hitbox,carte.compute_walls[j])){
+                double angle;
+                angle = atan2((carte.compute_walls[j][1]-carte.compute_walls[j][0]).y(),(carte.compute_walls[j][1]-carte.compute_walls[j][0]).x())+(2*M_PI) - kart.vit[1];
+                while(angle <M_PI){
+                    angle += 2*M_PI;
+                }
+                while(angle >M_PI){
+                    angle += -2*M_PI;
+                }
+                kart.vit[1] =  kart.vit[1] + 2*angle;
+            std::cout<<"Collided with wall "<<j<<std::endl;
+        }
+    }
 
-    std::cout<<"Getting Keys"<<std::endl;
+    //std::cout<<"Getting Keys"<<std::endl;
     kart.updateKeys();
     kart.depl();
-    std::cout<<"Moving Camera"<<std::endl;
+    //std::cout<<"Moving Camera"<<std::endl;
     kart.MoveCamera();
     std::cout<<kart.pos<<std::endl;
 }

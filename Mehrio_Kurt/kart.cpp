@@ -56,7 +56,7 @@ Kart::Kart(map map){
     bunny.setVertices(depl);
     delete[] depl;
 
-    double xmax=0,xmin=0,ymax=0,ymin=0;
+    double xmax=-1000,xmin=+1000,ymax=-1000,ymin=+1000;
     for(int i=0;i<bunny.vertices().size();i++){
         DoublePoint3 p = bunny.vertices()[i];
         if (p.x()>xmax){
@@ -131,9 +131,9 @@ void Kart::updateKeys(){
     Event ev;
     do{
     getEvent(0,ev);
-    std::cout<<"Got event: "<<ev.type<<ev.key<<std::endl;
+    //std::cout<<"Got event: "<<ev.type<<ev.key<<std::endl;
     if(ev.type==EVT_KEY_ON){
-        std::cout<<"On detecte une touche allumé"<<std::endl;
+        //std::cout<<"On detecte une touche allumé"<<std::endl;
         if(ev.key == 'i'){
             moteur=1;
         }
@@ -149,6 +149,7 @@ void Kart::updateKeys(){
     }
 
     if(ev.type==EVT_KEY_OFF){
+        //std::cout<<"On detecte une touche off"<<std::endl;
         if((ev.key == 'i')&&(moteur==1)){
             moteur=0;
         }
