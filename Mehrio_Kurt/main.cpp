@@ -53,28 +53,88 @@ void events() {
 
 int main(int argc, char** argv)
 {
-    map carte("SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3_physics.png");
-    std::cout<<"Genere la carte correctement"<<std::endl;
-    Kart kart(carte);
-    Window glWindow = openWindow3D(512, 512, "3D Window");
-    Window W=openComplexWindow(15,15,"events",1);
-    setActiveWindow(glWindow);
-    setBackGround(Color(0,0,0));
-    anyClick();
+    int nplayers = 1;
+    Window W=openComplexWindow(200,500,"Mehrio Kurt",1,0,0,800,100);
 
-    std::cout<<"On rentre dans draw"<<std::endl;
-    carte.draw();
-    std::cout<<carte.start_position<<" ,"<<carte.start_direction <<std::endl;
-    run_physics(kart,carte);
-    kart.showKart();
-    kart.MoveCamera();
-    std::cout<<"On sort de draw"<<std::endl;
-    for(int i=0;i<25000;i++){
-        milliSleep(50);
-        run_physics(kart,carte);
+
+    fillRect(10,10,180,100,RED);
+    drawString(30,70,"1  Joueur",BLACK,24);
+
+    fillRect(10,170,180,100,YELLOW);
+    drawString(30,240,"2 Joueurs",BLACK,24);
+
+    fillRect(10,330,180,100,GREEN);
+    drawString(30,400,"Départ",BLACK,24);
+
+    int x,y;
+    getMouse(x,y);
+
+    if ((y<270)&&(y>170)){
+        nplayers = 2;
     }
-    anyClick();
-    closeWindow(glWindow);
-    endGraphics();
+
+    if(nplayers==2){
+        map carte("SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3_physics.png");
+        std::cout<<"Genere la carte correctement"<<std::endl;
+        Kart kart1(carte,1);
+        Kart kart2(carte,2);
+        Window FirstPlayerWindow = openWindow3D(500, 500, "Joueur 1",290,140);
+        Window SecondPlayerWindow = openWindow3D(500, 500, "Joueur 2",1012,140);
+
+        setActiveWindow(FirstPlayerWindow);
+        setBackGround(Color(0,0,0));
+        carte.draw();
+        kart1.showKart();
+        kart2.showKart();
+        setActiveWindow(SecondPlayerWindow);
+        setBackGround(Color(0,0,0));
+        carte.draw();
+        kart1.showKart();
+        kart2.showKart();
+        anyClick();  //Waiting for click to start
+
+        for(int i=0;i<25000;i++){
+            milliSleep(1);
+            updateKeys(kart1,kart2);
+            run_physics(kart1,carte);
+            run_physics(kart2,carte);
+            setActiveWindow(FirstPlayerWindow);
+            kart1.MoveCamera();
+            setActiveWindow(SecondPlayerWindow);
+            kart2.MoveCamera();
+            setActiveWindow(W);
+        }
+        anyClick();
+        closeWindow(FirstPlayerWindow);
+        closeWindow(SecondPlayerWindow);
+        closeWindow(W);
+        endGraphics();
+
+
+
+    }
+    else{
+        map carte("SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3_physics.png");
+        std::cout<<"Genere la carte correctement"<<std::endl;
+        Kart kart1(carte,1);
+        Window FirstPlayerWindow = openWindow3D(500, 500, "Joueur 1",290,140);
+        setActiveWindow(FirstPlayerWindow);
+        setBackGround(Color(0,0,0));
+        carte.draw();
+        kart1.showKart();
+
+        anyClick();  //Waiting for click to start
+
+        for(int i=0;i<25000;i++){
+            milliSleep(10);
+            updateKeys(kart1);
+            run_physics(kart1,carte);
+            kart1.MoveCamera();
+            }
+        anyClick();
+        closeWindow(FirstPlayerWindow);
+        closeWindow(W);
+        endGraphics();
+    }
     return 0;
 }

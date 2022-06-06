@@ -64,10 +64,114 @@ void run_physics(Kart &kart,map carte){
     }
     kart.maxvit = carte.get_vit(kart.pos);
     //std::cout<<"Getting Keys"<<std::endl;
-    kart.updateKeys();
     kart.depl();
     kart.MoveCamera();
     //std::cout<<kart.pos<<std::endl;
 }
 
 
+void updateKeys(Kart &kart1){
+    Event ev;
+    do{
+    getEvent(0,ev);
+    //std::cout<<"Got event: "<<ev.type<<ev.key<<std::endl;
+    if(ev.type==EVT_KEY_ON){
+        //std::cout<<"On detecte une touche allumé"<<std::endl;
+        if(ev.key == 'z'){
+            kart1.moteur=1;
+        }
+        if(ev.key == 's'){
+            kart1.moteur=-1;
+        }
+        if(ev.key == 'q'){
+            kart1.dir = -1;
+        }
+        if(ev.key == 'd'){
+            kart1.dir = 1;
+        }
+    }
+
+    if(ev.type==EVT_KEY_OFF){
+        //std::cout<<"On detecte une touche off"<<std::endl;
+        if((ev.key == 'z')&&(kart1.moteur==1)){
+            kart1.moteur=0;
+        }
+        if((ev.key == 's')&&(kart1.moteur==-1)){
+            kart1.moteur=0;
+        }
+        if((ev.key == 'q')&&(kart1.dir==-1)){
+            kart1.dir = 0;
+        }
+        if((ev.key == 'd')&&(kart1.dir==1)){
+            kart1.dir = 0;
+        }
+    }
+
+    }while(ev.type!=EVT_NONE);
+}
+
+void updateKeys(Kart &kart1,Kart &kart2){
+    Event ev;
+    do{
+    getEvent(0,ev);
+    //std::cout<<"Got event: "<<ev.type<<ev.key<<std::endl;
+    if(ev.type==EVT_KEY_ON){
+        //std::cout<<"On detecte une touche allumé"<<std::endl;
+        if(ev.key == 'z'){
+            kart1.moteur=1;
+        }
+        if(ev.key == 's'){
+            kart1.moteur=-1;
+        }
+        if(ev.key == 'q'){
+            kart1.dir = -1;
+        }
+        if(ev.key == 'd'){
+            kart1.dir = 1;
+        }
+        //Joueur 2
+        if(ev.key == 'i'){
+            kart2.moteur=1;
+        }
+        if(ev.key == 'k'){
+            kart2.moteur=-1;
+        }
+        if(ev.key == 'j'){
+            kart2.dir = -1;
+        }
+        if(ev.key == 'l'){
+            kart2.dir = 1;
+        }
+    }
+
+    if(ev.type==EVT_KEY_OFF){
+        //std::cout<<"On detecte une touche off"<<std::endl;
+        if((ev.key == 'z')&&(kart1.moteur==1)){
+            kart1.moteur=0;
+        }
+        if((ev.key == 's')&&(kart1.moteur==-1)){
+            kart1.moteur=0;
+        }
+        if((ev.key == 'q')&&(kart1.dir==-1)){
+            kart1.dir = 0;
+        }
+        if((ev.key == 'd')&&(kart1.dir==1)){
+            kart1.dir = 0;
+        }
+        //Joueur 2
+        if((ev.key == 'i')&&(kart2.moteur==1)){
+            kart2.moteur=0;
+        }
+        if((ev.key == 'k')&&(kart2.moteur==-1)){
+            kart2.moteur=0;
+        }
+        if((ev.key == 'j')&&(kart2.dir==-1)){
+            kart2.dir = 0;
+        }
+        if((ev.key == 'l')&&(kart2.dir==1)){
+            kart2.dir = 0;
+        }
+    }
+
+    }while(ev.type!=EVT_NONE);
+}

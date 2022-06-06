@@ -7,3 +7,5 @@
 #include <cmath>
 
 void run_physics(Kart &kart,map carte);
+void updateKeys(Kart &kart1,Kart &kart2);
+void updateKeys(Kart &kart1);
