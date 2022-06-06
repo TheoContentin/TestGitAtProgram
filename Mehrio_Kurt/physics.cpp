@@ -58,17 +58,16 @@ void run_physics(Kart &kart,map carte){
                 while(angle >M_PI){
                     angle += -2*M_PI;
                 }
-                kart.vit[1] =  kart.vit[1] + angle;
+                kart.vit[1] =  kart.vit[1] + kart.moteur*angle;
             std::cout<<"Collided with wall "<<j<<std::endl;
         }
     }
-
+    kart.maxvit = carte.get_vit(kart.pos);
     //std::cout<<"Getting Keys"<<std::endl;
     kart.updateKeys();
     kart.depl();
-    //std::cout<<"Moving Camera"<<std::endl;
     kart.MoveCamera();
-    std::cout<<kart.pos<<std::endl;
+    //std::cout<<kart.pos<<std::endl;
 }
 
 

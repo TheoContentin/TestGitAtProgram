@@ -32,7 +32,7 @@ void rotate_mesh2d(Mesh &Mymesh, FVector<float,3> pos,float angle){
 
 Kart::Kart(map map){
     vit = {0,float(atan2(map.start_direction[1],map.start_direction[0]))};
-    vnorm = 0;
+    maxvit = 1;
     pos = map.start_position;
     orient = {1/map.dt,float(atan2(map.start_direction[1],map.start_direction[0]))};
     prevangle = orient[1];
@@ -86,10 +86,11 @@ void Kart::showKart(){
 void Kart::depl(){
 
     if(moteur == 1){
-        targ_vit = orient;
+        targ_vit[0] = maxvit*orient[0];
+        targ_vit[1] = orient[1];
     }
     if(moteur ==-1){
-        targ_vit[0] = -orient[0];
+        targ_vit[0] = -maxvit*orient[0];
         targ_vit[1] =  orient[1];
     }
     if(moteur == 0 ){
@@ -117,7 +118,6 @@ void Kart::depl(){
     pos.y() += vit[0]*sin(vit[1]);
 
 
-    std::cout<<" "<<pos<<std::endl;
     bunny.setVertices(depl);
     bunny.setColor(Color(0,100,254));
     delete[] depl;
@@ -173,6 +173,7 @@ void Kart::MoveCamera(){
     setCamera(pos,-20*cam,DoubleVector3(0,0,1));
 }
 
+
 void Kart::VitTurn(){
 
     vit[1] += (targ_vit[1]-vit[1])/10;
@@ -181,5 +182,4 @@ void Kart::VitTurn(){
 void Kart::accel(){
 
     vit[0] += 0.4*(targ_vit[0]-vit[0]);
-    std::cout<<vnorm<<std::endl;
 }

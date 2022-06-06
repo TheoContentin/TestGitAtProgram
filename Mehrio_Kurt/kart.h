@@ -8,9 +8,9 @@ using namespace Imagine;
 
 class Kart{
 public:
+     float maxvit;
      FVector<float, 3> pos;
      FVector<float, 2> vit; //vitesse en polaire
-     float vnorm;
      FVector<float, 2> targ_vit; //Vitesse voulue en polaire
      FVector<float, 2> orient; //Orientation du kart en polaire
      float prevangle;

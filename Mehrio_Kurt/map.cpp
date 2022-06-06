@@ -116,14 +116,14 @@ void map::generateWalls(){
             r = physics(i,j).r();
             g = physics(i,j).g();
             b = physics(i,j).b();
-            if((b==0) &&(g==0)){
+            if(r!=0){
                 std::cout<<"Premier point : "<<r<<std::endl;
                 Q.push(PointClasse(r,DoublePoint3(100*double(j+0.5)/w,100*double(i+0.5)/h,0)));
             }
         }
     }
 
-    int last = 256;
+    int last = 255;
     std::vector<DoublePoint3> mur;
     DoublePoint3 ptemp;
     DoublePoint3 firstp;
@@ -134,6 +134,7 @@ void map::generateWalls(){
 
      if (p1.val == last){
          firstp = p1.p;
+         mur.push_back(p1.p);
      }
 
      if (p1.val==last-1){
@@ -195,10 +196,10 @@ void map::set_start(){
     DoublePoint3 Lookat;
     for (int j=0;j<w;j++) {
         for (int i=0;i<h;i++) {
-            if(physics(i,j)==Color(0,248,0)){
+            if(physics(i,j)==Color(0,248,255)){
                 start_position=DoublePoint3(100*double(j+0.5)/w,100*double(i+0.5)/h,0);
             }
-            if(physics(i,j)==Color(0,128,0)){
+            if(physics(i,j)==Color(0,128,255)){
                 Lookat=DoublePoint3(100*double(j+0.5)/w,100*double(i+0.5)/h,0);
             }
         }
@@ -209,7 +210,7 @@ void map::set_start(){
 float map::get_vit(DoublePoint3 pos){
     int h=physics.size(0);
     int w=physics.size(1);
-    return physics(int(w*(pos.y()-0.5)/100),int(w*(pos.x()-0.5)/100)).b()/255;
+    return physics(int(w*(pos.y()-0.5)/100),int(h*(pos.x()-0.5)/100)).b()/255.;
 }
 
 
