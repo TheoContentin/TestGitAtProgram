@@ -206,6 +206,11 @@ void map::set_start(){
     start_direction = (Lookat-start_position).normalize();
 }
 
+float map::get_vit(DoublePoint3 pos){
+    int h=physics.size(0);
+    int w=physics.size(1);
+    return physics(int(w*(pos.y()-0.5)/100),int(w*(pos.x()-0.5)/100)).b()/255;
+}
 
 
 // Recuperation du Tp d'algo Fastmarching
