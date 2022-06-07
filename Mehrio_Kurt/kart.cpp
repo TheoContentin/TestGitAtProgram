@@ -30,6 +30,13 @@ void rotate_mesh2d(Mesh &Mymesh, FVector<float,3> pos,float angle){
     delete[] depl;
 }
 
+void rotate_hitbox(FVector<FVector<double,3>,4> Hitbox, FVector<float,3> pos,float angle){
+    for(int i=0; i<4; i++){
+        Hitbox[i].x() = pos[0] + cos(angle)*(Hitbox[i].x()-pos[0]) - sin(angle)*(Hitbox[i].y()-pos[1]);
+        Hitbox[i].y() = pos[1] + sin(angle)*(Hitbox[i].x()-pos[0]) + cos(angle)*(Hitbox[i].y()-pos[1]);
+        }
+}
+
 Kart::Kart(map map){
     vit = {0,float(atan2(map.start_direction[1],map.start_direction[0]))};
     maxvit = 1;
@@ -183,6 +190,7 @@ void Kart::depl(){
     delete[] depl;
 
     rotate_mesh2d(bunny,pos,orient[1]-prevangle);
+    rotate_hitbox(Hitbox,pos,orient[1]-prevangle);
     prevangle = orient[1];
 
 }
@@ -203,5 +211,5 @@ void Kart::VitTurn(){
 }
 void Kart::accel(){
 
-    vit[0] += 0.4*(targ_vit[0]-vit[0]);
+    vit[0] += 0.07*(targ_vit[0]-vit[0]);
 }

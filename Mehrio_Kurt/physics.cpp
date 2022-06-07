@@ -52,10 +52,10 @@ void run_physics(Kart &kart,map carte){
         if(collided(kart.Hitbox,carte.compute_walls[j])){
                 double angle;
                 angle = 2*(atan2((carte.compute_walls[j][1]-carte.compute_walls[j][0]).y(),(carte.compute_walls[j][1]-carte.compute_walls[j][0]).x())+(2*M_PI) - kart.vit[1]);
-                while(angle <M_PI){
+                while(angle <-M_PI){
                     angle += 2*M_PI;
                 }
-                while(angle >M_PI){
+                while(angle >+M_PI){
                     angle += -2*M_PI;
                 }
                 kart.vit[1] =  kart.vit[1] + kart.moteur*angle;
@@ -68,7 +68,6 @@ void run_physics(Kart &kart,map carte){
     kart.MoveCamera();
     //std::cout<<kart.pos<<std::endl;
 }
-
 
 void updateKeys(Kart &kart1){
     Event ev;
@@ -174,4 +173,40 @@ void updateKeys(Kart &kart1,Kart &kart2){
     }
 
     }while(ev.type!=EVT_NONE);
+}
+
+void compute_collisions(Kart &kart1,Kart &kart2){
+    bool collision = false;
+    DoublePoint3 v1 = (kart1.Hitbox[1]-kart1.Hitbox[0]).normalize();
+    DoublePoint3 v2 = (kart1.Hitbox[3]-kart1.Hitbox[0]).normalize();
+
+    for(int i =0;i<4;i++){
+        DoublePoint3 v3 = kart2.Hitbox[i]-kart1.Hitbox[0];
+        double scal1 = (v1.x()*v3.x() + v1.y()*v3.y())/sqrt(pow(v1.x(),2)+pow(v1.y(),2));
+        double scal2 = (v2.x()*v3.x() + v2.y()*v3.y())/sqrt(pow(v2.x(),2)+pow(v2.y(),2));
+
+        if((scal1>0)&&(scal1<1)&&(scal2>0)&&(scal2<1)){
+            collision = true;
+        }
+    }
+
+    if(collision){
+        std::cout<<"Collision !!"<<std::endl;
+
+        float angle = kart2.vit[1] - kart1.vit[1];
+        while(angle <-M_PI){
+            angle += 2*M_PI;
+        }
+        while(angle >=M_PI){
+            angle += -2*M_PI;
+        }
+
+        double swapvar = kart1.vit[0];
+        kart1.vit[0] = kart2.vit[0];
+        kart2.vit[0] = swapvar;
+
+        kart1.vit[1]+= 0.5*angle;
+        kart2.vit[1]-= 0.5*angle;
+    }
+
 }
