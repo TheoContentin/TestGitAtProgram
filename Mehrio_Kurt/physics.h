@@ -9,3 +9,4 @@
 void run_physics(Kart &kart,map carte);
 void updateKeys(Kart &kart1,Kart &kart2);
 void updateKeys(Kart &kart1);
+void compute_collison(Kart &kart1,Kart &kart2);

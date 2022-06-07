@@ -4,6 +4,8 @@
 
 using namespace Imagine;
 
+const Color myrainbow[4] = {YELLOW,GREEN,RED,BLUE};
+
 map::map(char const *background_path,char const *texture_path, char const *physics_path){
 
     if(! load(background, stringSrcPath( background_path ))){
@@ -154,12 +156,17 @@ void map::generateWalls(){
              MurTab[i]=mur[i];
              MurTab[(2*len)-1-i] = mur[i] + DoubleVector3(0,0,wallheight);
          }
-         Triangle *T=new Triangle[2*(len-1)];
+
+         Quad *Qua=new Quad[len-1];
+         Color *Cols = new Color[len-1];
          for(int i = 0; i<len-1;i++){
-             T[2*i] = Triangle(i,i+1,(2*len)-1-i);
-             T[2*i+1] = Triangle((2*len)-1-i-1,i+1,(2*len)-1-i);
+             Qua[i] = Quad(i,i+1,(2*len)-2-i,(2*len)-1-i);
+             Cols[i] = myrainbow[i%4];
+
          }
-         walls.push_back(Mesh(MurTab,2*len,T,2*(len-1)));
+         Mesh tempmesh = Mesh(MurTab,2*len,0,0,Qua,len-1,FACE_COLOR);
+         tempmesh.setColors(QUAD,Cols);
+         walls.push_back(tempmesh);
 
          while(!mur.empty()){
              mur.pop_back();
@@ -179,12 +186,18 @@ void map::generateWalls(){
         MurTab[i]=mur[i];
         MurTab[(2*len)-1-i] = mur[i] + DoubleVector3(0,0,wallheight);
     }
-    Triangle *T=new Triangle[2*(len-1)];
+
+    Quad *Qua=new Quad[len-1];
+    Color *Cols = new Color[len-1];
     for(int i = 0; i<len-1;i++){
-        T[2*i] = Triangle(i,i+1,(2*len)-1-i);
-        T[2*i+1] = Triangle((2*len)-1-i-1,i+1,(2*len)-1-i);
+        Qua[i] = Quad(i,i+1,(2*len)-2-i,(2*len)-1-i);
+        Cols[i] = myrainbow[i%4];
+
     }
-    walls.push_back(Mesh(MurTab,2*len,T,2*(len-1)));
+    Mesh tempmesh = Mesh(MurTab,2*len,0,0,Qua,len-1,FACE_COLOR);
+    tempmesh.setColors(QUAD,Cols);
+    walls.push_back(tempmesh);
+
 
     std::cout<<"In generateWalls() got : "<<walls.size()<<std::endl;
 }
