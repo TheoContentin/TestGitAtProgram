@@ -10,24 +10,28 @@ using namespace Imagine;
 
 int main(int argc, char** argv)
 {
-    int nplayers = 1;
+    int nplayers = 0;
+    bool started =false;
     Window W=openComplexWindow(200,500,"Mehrio Kurt",1,0,0,800,100);
+    Image<Color> menu;
+    load(menu,srcPath("menu.png"));
+    display(menu,0,0);
 
-
-    fillRect(10,10,180,100,RED);
-    drawString(30,70,"1  Joueur",BLACK,24);
-
-    fillRect(10,170,180,100,YELLOW);
-    drawString(30,240,"2 Joueurs",BLACK,24);
-
-    fillRect(10,330,180,100,GREEN);
-    drawString(30,400,"Départ",BLACK,24);
+    //selecting mode
 
     int x,y;
-    getMouse(x,y);
-
-    if ((y<270)&&(y>170)){
-        nplayers = 2;
+    while(nplayers ==0){
+        getMouse(x,y);
+        if ((y<160)&&(y>96)){
+            display(menu,0,0);
+            drawLine(33,147,174,147,YELLOW,3);
+            nplayers = 1;
+        }
+        if ((y<250)&&(y>190)){
+            display(menu,0,0);
+            drawLine(33,239,174,239,YELLOW,3);
+            nplayers = 2;
+        }
     }
 
     if(nplayers==2){
@@ -45,11 +49,18 @@ int main(int argc, char** argv)
         kart2.showKart();
         setActiveWindow(SecondPlayerWindow);
         setBackGround(Color(0,0,0));
+
         carte.draw();
         kart1.showKart();
         kart2.showKart();
-        anyClick();  //Waiting for click to start
 
+        setActiveWindow(W);
+        while(!started){
+            getMouse(x,y);
+            if ((y<330)&&(y>270)){
+                started = true;
+            }
+        }
         for(int i=0;i<25000;i++){
             milliSleep(1);
             updateKeys(kart1,kart2);
@@ -68,9 +79,6 @@ int main(int argc, char** argv)
         closeWindow(SecondPlayerWindow);
         closeWindow(W);
         endGraphics();
-
-
-
     }
     else{
         map carte("SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3.png","SuperMarioKartMapFlowerCup3_physics.png");
@@ -82,14 +90,22 @@ int main(int argc, char** argv)
         carte.draw();
         kart1.showKart();
 
-        anyClick();  //Waiting for click to start
+        setActiveWindow(W);
+        while(!started){
+            getMouse(x,y);
+            if ((y<330)&&(y>270)){
+                started = true;
+            }
+        }
 
+        setActiveWindow(FirstPlayerWindow);
         for(int i=0;i<25000;i++){
-            milliSleep(10);
+
+            milliSleep(15);
             updateKeys(kart1);
             run_physics(kart1,carte);
             kart1.MoveCamera();
-            }
+        }
         anyClick();
         closeWindow(FirstPlayerWindow);
         closeWindow(W);
