@@ -16,6 +16,9 @@ public:
      float prevangle;
      int dir; //-1 si il tourne à gauche, 1 à droite, 0 tout droit
      int moteur; //1 si en marche, 0 sinon, -1 marche arriere
+
+     bool incollision;
+
      Kart(map map);
      Kart(map map,int number);
      Mesh bunny;

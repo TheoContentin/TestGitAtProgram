@@ -223,7 +223,12 @@ void map::set_start(){
 float map::get_vit(DoublePoint3 pos){
     int h=physics.size(0);
     int w=physics.size(1);
-    return physics(int(w*(pos.y()-0.5)/100),int(h*(pos.x()-0.5)/100)).b()/255.;
+    if(int((w*(pos.y()-0.5)/100<w)&&(int(h*(pos.x()-0.5)/100)<h)&&(w*(pos.y()-0.5)/100>-1)&&(int(h*(pos.x()-0.5)/100)>-1))){
+            return physics(int(w*(pos.y()-0.5)/100),int(h*(pos.x()-0.5)/100)).b()/255.;
+
+    }else{
+        return 1;
+    }
 }
 
 

@@ -30,13 +30,6 @@ void rotate_mesh2d(Mesh &Mymesh, FVector<float,3> pos,float angle){
     delete[] depl;
 }
 
-void rotate_hitbox(FVector<FVector<float,3>,4> &Hitbox, FVector<float,3> pos,float angle){
-    for(int i=0; i<4; i++){
-        Hitbox[i].x() = pos[0] + cos(angle)*(Hitbox[i].x()-pos[0]) - sin(angle)*(Hitbox[i].y()-pos[1]);
-        Hitbox[i].y() = pos[1] + sin(angle)*(Hitbox[i].x()-pos[0]) + cos(angle)*(Hitbox[i].y()-pos[1]);
-        }
-}
-
 Kart::Kart(map map){
     vit = {0,float(atan2(map.start_direction[1],map.start_direction[0]))};
     maxvit = 1;
@@ -46,6 +39,7 @@ Kart::Kart(map map){
     targ_vit = {0,0};
     moteur = 0;
     dir = 0;
+    incollision = false;
     std::string fileName = srcPath("bunny.obj");
     readMesh(bunny, fileName);
 
@@ -80,10 +74,13 @@ Kart::Kart(map map){
             ymin=p.y();
         }
 
-        Hitbox[0] = FVector<double,3>(xmin,ymin,0);
-        Hitbox[1] = FVector<double,3>(xmax,ymin,0);
-        Hitbox[2] = FVector<double,3>(xmax,ymax,0);
-        Hitbox[3] = FVector<double,3>(xmin,ymax,0);
+        float dx = (xmax - xmin)/2;
+        float dy = (ymax - ymin)/2;
+
+        Hitbox[0] = FVector<double,3>(pos.x()-dx,pos.y()-dy,0);
+        Hitbox[1] = FVector<double,3>(pos.x()+dx,pos.y()-dy,0);
+        Hitbox[2] = FVector<double,3>(pos.x()+dx,pos.y()+dy,0);
+        Hitbox[3] = FVector<double,3>(pos.x()-dx,pos.y()+dy,0);
     }
 }
 
@@ -101,6 +98,7 @@ Kart::Kart(map map,int number){ // for two player mode
     targ_vit = {0,0};
     moteur = 0;
     dir = 0;
+    incollision = false;
     std::string fileName = srcPath("bunny.obj");
     readMesh(bunny, fileName);
 
@@ -140,10 +138,13 @@ Kart::Kart(map map,int number){ // for two player mode
             ymin=p.y();
         }
 
-        Hitbox[0] = FVector<double,3>(xmin,ymin,0);
-        Hitbox[1] = FVector<double,3>(xmax,ymin,0);
-        Hitbox[2] = FVector<double,3>(xmax,ymax,0);
-        Hitbox[3] = FVector<double,3>(xmin,ymax,0);
+        float dx = (xmax - xmin)/2;
+        float dy = (ymax - ymin)/2;
+
+        Hitbox[0] = FVector<double,3>(pos.x()-dx,pos.y()-dy,0);
+        Hitbox[1] = FVector<double,3>(pos.x()+dx,pos.y()-dy,0);
+        Hitbox[2] = FVector<double,3>(pos.x()+dx,pos.y()+dy,0);
+        Hitbox[3] = FVector<double,3>(pos.x()-dx,pos.y()+dy,0);
     }
 }
 
@@ -173,7 +174,6 @@ void Kart::depl(){
     accel();
 
     rotate_mesh2d(bunny,pos,orient[1]-prevangle);
-    rotate_hitbox(Hitbox,pos,orient[1]-prevangle);
     prevangle = orient[1];
 
     FloatPoint3* depl=new FloatPoint3[bunny.vertices().size()];
