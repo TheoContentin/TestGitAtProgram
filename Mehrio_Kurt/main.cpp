@@ -61,8 +61,10 @@ int main(int argc, char** argv)
                 started = true;
             }
         }
+        drawString(15,450, "1/3",BLACK,20);
+        drawString(135,450, "1/3",BLACK,20);
         for(int i=0;i<25000;i++){
-            milliSleep(1);
+            milliSleep(5);
             updateKeys(kart1,kart2);
             compute_collisions(kart1,kart2);
             run_physics(kart1,carte);
@@ -97,14 +99,15 @@ int main(int argc, char** argv)
                 started = true;
             }
         }
-
-        setActiveWindow(FirstPlayerWindow);
+        drawString(15,450, "1/3",BLACK,20);
         for(int i=0;i<25000;i++){
-
             milliSleep(15);
+            setActiveWindow(W);
             updateKeys(kart1);
             run_physics(kart1,carte);
+            setActiveWindow(FirstPlayerWindow);
             kart1.MoveCamera();
+
         }
         anyClick();
         closeWindow(FirstPlayerWindow);

@@ -16,6 +16,8 @@ public:
      float prevangle;
      int dir; //-1 si il tourne à gauche, 1 à droite, 0 tout droit
      int moteur; //1 si en marche, 0 sinon, -1 marche arriere
+     int nb_checkpoint; //combien de checkpoint ont été passés (2 par tour)
+     int player; //numero du joueur (1 ou 2)
 
      bool incollision;
 
@@ -24,7 +26,7 @@ public:
      Mesh bunny;
      FVector<FVector<float,3>,4> Hitbox;
      void showKart();
-     void depl();
+     void depl(DoublePoint3 start_position);
      void updateKeys();
      void MoveCamera();
      void VitTurn();

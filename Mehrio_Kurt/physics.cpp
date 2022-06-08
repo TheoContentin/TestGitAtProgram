@@ -59,12 +59,12 @@ void run_physics(Kart &kart,map carte){
                     angle += -2*M_PI;
                 }
                 kart.vit[1] =  kart.vit[1] + kart.moteur*angle;
-            std::cout<<"Collided with wall "<<j<<std::endl;
+            //std::cout<<"Collided with wall "<<j<<std::endl;
         }
     }
     kart.maxvit = carte.get_vit(kart.pos);
     //std::cout<<"Getting Keys"<<std::endl;
-    kart.depl();
+    kart.depl(carte.start_position);
     kart.MoveCamera();
     //std::cout<<kart.pos<<std::endl;
 }
@@ -224,7 +224,7 @@ void compute_collisions(Kart &kart1,Kart &kart2){
 //        click();
 //        closeWindow(W);
 
-        std::cout<<"Collision !!"<<std::endl;       
+        //std::cout<<"Collision !!"<<std::endl;
 
         float angle = kart2.vit[1] - kart1.vit[1];
         while(angle <-M_PI){

@@ -119,7 +119,7 @@ void map::generateWalls(){
             g = physics(i,j).g();
             b = physics(i,j).b();
             if(r!=0){
-                std::cout<<"Premier point : "<<r<<std::endl;
+                //std::cout<<"Premier point : "<<r<<std::endl;
                 Q.push(PointClasse(r,DoublePoint3(100*double(j+0.5)/w,100*double(i+0.5)/h,0)));
             }
         }
@@ -140,7 +140,7 @@ void map::generateWalls(){
      }
 
      if (p1.val==last-1){
-         std::cout<<p1.val<<" "<<last-1<<std::endl;
+         //std::cout<<p1.val<<" "<<last-1<<std::endl;
          mur.push_back(p1.p);
 
          FVector<DoublePoint3,2> seg = {ptemp,p1.p};
@@ -199,7 +199,7 @@ void map::generateWalls(){
     walls.push_back(tempmesh);
 
 
-    std::cout<<"In generateWalls() got : "<<walls.size()<<std::endl;
+    //std::cout<<"In generateWalls() got : "<<walls.size()<<std::endl;
 }
 
 void map::set_start(){
@@ -224,7 +224,7 @@ float map::get_vit(DoublePoint3 pos){
     int h=physics.size(0);
     int w=physics.size(1);
     if(int((w*(pos.y()-0.5)/100<w)&&(int(h*(pos.x()-0.5)/100)<h)&&(w*(pos.y()-0.5)/100>-1)&&(int(h*(pos.x()-0.5)/100)>-1))){
-            return physics(int(w*(pos.y()-0.5)/100),int(h*(pos.x()-0.5)/100)).b()/255.;
+            return 2*physics(int(w*(pos.y()-0.5)/100),int(h*(pos.x()-0.5)/100)).b()/255.;
 
     }else{
         return 1;

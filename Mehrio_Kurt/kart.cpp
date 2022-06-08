@@ -12,7 +12,7 @@ void rotate_mesh3d(Mesh &Mymesh, DoublePoint3 Axis, double angle){
         depl[i].z() = (axe.x()*axe.z()*(1-c) - axe.y()*s)*Mymesh.vertices()[i].x() + ((axe.z()*axe.y()*(1-c)) - s*axe.x())*Mymesh.vertices()[i].y() + (axe.z()*axe.z()*(1-c) + c)*Mymesh.vertices()[i].z();
     }
 
-    std::cout<<depl<<std::endl;
+    //std::cout<<depl<<std::endl;
 
     Mymesh.setVertices(depl);
     delete[] depl;
@@ -30,6 +30,7 @@ void rotate_mesh2d(Mesh &Mymesh, FVector<float,3> pos,float angle){
     delete[] depl;
 }
 
+// pas utilisé
 Kart::Kart(map map){
     vit = {0,float(atan2(map.start_direction[1],map.start_direction[0]))};
     maxvit = 1;
@@ -84,10 +85,12 @@ Kart::Kart(map map){
     }
 }
 
-Kart::Kart(map map,int number){ // for two player mode
+Kart::Kart(map map,int number){ // for one and two player mode
+    nb_checkpoint = 0;
     vit = {0,float(atan2(map.start_direction[1],map.start_direction[0]))};
     maxvit = 1;
-    if(number ==1 ){
+    player = number;
+    if(number == 1 ){
     pos = map.start_position;
     }
     else{
@@ -152,7 +155,7 @@ void Kart::showKart(){
     showMesh(bunny);
 }
 
-void Kart::depl(){
+void Kart::depl(DoublePoint3 start_position){
 
     if(moteur == 1){
         targ_vit[0] = maxvit*orient[0];
@@ -186,12 +189,44 @@ void Kart::depl(){
         Hitbox[i].x() += vit[0]*cos(vit[1]);
         Hitbox[i].y() += vit[0]*sin(vit[1]);
     }
+    int xi = pos.x();
+    int yi = pos.y();
+
     pos.x() += vit[0]*cos(vit[1]);
     pos.y() += vit[0]*sin(vit[1]);
 
 
+    float xf = pos.x();
+    float yf = pos.y();
+
     bunny.setVertices(depl);
     delete[] depl;
+
+    // passage checkpoint et compteur tours
+    bool checkpoint0 = nb_checkpoint%2 == 1 and xf < start_position.x()
+            and xi >= start_position.x() and abs(yf-start_position.y()) < 15;
+    bool checkpoint1 = yf < 50 and yi >= 50 and nb_checkpoint%2 == 0;
+    if (checkpoint0 or checkpoint1){
+        nb_checkpoint += 1;
+        std::stringstream ss;
+        ss << 1+nb_checkpoint/2;
+        std::string str = ss.str();
+        if (nb_checkpoint/2 >= 3){
+            if (player == 1)
+                drawString(15,400, "FINISH!",RED,13);
+            else
+                drawString(115,400, "FINISH!",RED,13);
+        }
+        else if (player == 1) {
+            fillRect(0,400,100,50,WHITE);
+            drawString(15,450,str + "/3",BLACK,20);
+        }
+        else{
+            fillRect(100,400,100,50,WHITE);
+            drawString(135,450,str + "/3",BLACK,20);
+        }
+    }
+
 }
 
 
