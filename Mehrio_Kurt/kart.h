@@ -19,7 +19,7 @@ public:
      Kart(map map);
      Kart(map map,int number);
      Mesh bunny;
-     FVector<FVector<double,3>,4> Hitbox;
+     FVector<FVector<float,3>,4> Hitbox;
      void showKart();
      void depl();
      void updateKeys();

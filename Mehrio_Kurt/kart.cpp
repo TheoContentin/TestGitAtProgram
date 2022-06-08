@@ -30,7 +30,7 @@ void rotate_mesh2d(Mesh &Mymesh, FVector<float,3> pos,float angle){
     delete[] depl;
 }
 
-void rotate_hitbox(FVector<FVector<double,3>,4> Hitbox, FVector<float,3> pos,float angle){
+void rotate_hitbox(FVector<FVector<float,3>,4> &Hitbox, FVector<float,3> pos,float angle){
     for(int i=0; i<4; i++){
         Hitbox[i].x() = pos[0] + cos(angle)*(Hitbox[i].x()-pos[0]) - sin(angle)*(Hitbox[i].y()-pos[1]);
         Hitbox[i].y() = pos[1] + sin(angle)*(Hitbox[i].x()-pos[0]) + cos(angle)*(Hitbox[i].y()-pos[1]);
@@ -172,6 +172,10 @@ void Kart::depl(){
     VitTurn();
     accel();
 
+    rotate_mesh2d(bunny,pos,orient[1]-prevangle);
+    rotate_hitbox(Hitbox,pos,orient[1]-prevangle);
+    prevangle = orient[1];
+
     FloatPoint3* depl=new FloatPoint3[bunny.vertices().size()];
     for (int i=0; i<bunny.vertices().size(); i++){
         depl[i] = bunny.vertices()[i];
@@ -188,11 +192,6 @@ void Kart::depl(){
 
     bunny.setVertices(depl);
     delete[] depl;
-
-    rotate_mesh2d(bunny,pos,orient[1]-prevangle);
-    rotate_hitbox(Hitbox,pos,orient[1]-prevangle);
-    prevangle = orient[1];
-
 }
 
 
@@ -205,9 +204,8 @@ void Kart::MoveCamera(){
 
 
 void Kart::VitTurn(){
-
-    vit[1] += (targ_vit[1]-vit[1])/10;
-    orient[1] += (vit[1]-orient[1])/11;
+    vit[1] += (targ_vit[1]-vit[1])/8;
+    orient[1] += (vit[1]-orient[1])/13;
 }
 void Kart::accel(){
 

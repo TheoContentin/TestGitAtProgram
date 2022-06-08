@@ -53,6 +53,7 @@ int main(int argc, char** argv)
         for(int i=0;i<25000;i++){
             milliSleep(1);
             updateKeys(kart1,kart2);
+            compute_collisions(kart1,kart2);
             run_physics(kart1,carte);
             run_physics(kart2,carte);
             compute_collisions(kart1,kart2);

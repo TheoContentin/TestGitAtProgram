@@ -177,13 +177,27 @@ void updateKeys(Kart &kart1,Kart &kart2){
 
 void compute_collisions(Kart &kart1,Kart &kart2){
     bool collision = false;
-    DoublePoint3 v1 = (kart1.Hitbox[1]-kart1.Hitbox[0]).normalize();
-    DoublePoint3 v2 = (kart1.Hitbox[3]-kart1.Hitbox[0]).normalize();
+
+    DoublePoint3 v1 = (kart1.Hitbox[1]-kart1.Hitbox[0]);
+    DoublePoint3 v2 = (kart1.Hitbox[3]-kart1.Hitbox[0]);
 
     for(int i =0;i<4;i++){
         DoublePoint3 v3 = kart2.Hitbox[i]-kart1.Hitbox[0];
-        double scal1 = (v1.x()*v3.x() + v1.y()*v3.y())/sqrt(pow(v1.x(),2)+pow(v1.y(),2));
-        double scal2 = (v2.x()*v3.x() + v2.y()*v3.y())/sqrt(pow(v2.x(),2)+pow(v2.y(),2));
+        double scal1 = (v1.x()*v3.x() + v1.y()*v3.y())/pow(v1.x(),2)+pow(v1.y(),2);
+        double scal2 = (v2.x()*v3.x() + v2.y()*v3.y())/pow(v2.x(),2)+pow(v2.y(),2);
+
+        if((scal1>0)&&(scal1<1)&&(scal2>0)&&(scal2<1)){
+            collision = true;
+        }
+    }
+
+    v1 = (kart2.Hitbox[1]-kart2.Hitbox[0]);
+    v2 = (kart2.Hitbox[3]-kart2.Hitbox[0]);
+
+    for(int i =0;i<4;i++){
+        DoublePoint3 v3 = kart1.Hitbox[i]-kart2.Hitbox[0];
+        double scal1 = (v1.x()*v3.x() + v1.y()*v3.y())/pow(v1.x(),2)+pow(v1.y(),2);
+        double scal2 = (v2.x()*v3.x() + v2.y()*v3.y())/pow(v2.x(),2)+pow(v2.y(),2);
 
         if((scal1>0)&&(scal1<1)&&(scal2>0)&&(scal2<1)){
             collision = true;
@@ -191,7 +205,26 @@ void compute_collisions(Kart &kart1,Kart &kart2){
     }
 
     if(collision){
-        std::cout<<"Collision !!"<<std::endl;
+        Window W = openWindow(1000,1000);
+        setActiveWindow(W);
+        drawCircle(kart1.Hitbox[0].x()*10,kart1.Hitbox[0].y()*10,3,BLUE);
+        drawCircle(kart1.Hitbox[1].x()*10,kart1.Hitbox[1].y()*10,3,BLUE);
+        drawCircle(kart1.Hitbox[2].x()*10,kart1.Hitbox[2].y()*10,3,BLUE);
+        drawCircle(kart1.Hitbox[3].x()*10,kart1.Hitbox[3].y()*10,3,BLUE);
+        drawCircle(kart1.pos.x()*10,kart1.pos.y()*10,3,BLUE);
+
+        drawCircle(kart2.Hitbox[0].x()*10,kart2.Hitbox[0].y()*10,3,RED);
+        drawCircle(kart2.Hitbox[1].x()*10,kart2.Hitbox[1].y()*10,3,RED);
+        drawCircle(kart2.Hitbox[2].x()*10,kart2.Hitbox[2].y()*10,3,RED);
+        drawCircle(kart2.Hitbox[3].x()*10,kart2.Hitbox[3].y()*10,3,RED);
+        drawCircle(kart2.pos.x()*10,kart2.pos.y()*10,3,RED);
+
+
+        click();
+
+        closeWindow(W);
+
+        std::cout<<"Collision !!"<<std::endl;       
 
         float angle = kart2.vit[1] - kart1.vit[1];
         while(angle <-M_PI){
@@ -207,6 +240,6 @@ void compute_collisions(Kart &kart1,Kart &kart2){
 
         kart1.vit[1]+= 0.5*angle;
         kart2.vit[1]-= 0.5*angle;
-    }
 
+    }
 }
