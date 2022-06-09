@@ -52,8 +52,6 @@ public:
     }
 };
 
-
-
 class FilePriorite {
     std::vector<PointClasse> v;
 public:

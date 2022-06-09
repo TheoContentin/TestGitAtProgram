@@ -239,8 +239,8 @@ void Kart::MoveCamera(){
 
 
 void Kart::VitTurn(){
-    vit[1] += (targ_vit[1]-vit[1])/8;
-    orient[1] += (vit[1]-orient[1])/13;
+    vit[1] += (targ_vit[1]-vit[1])/10;
+    orient[1] += (vit[1]-orient[1])/9;
 }
 void Kart::accel(){
 

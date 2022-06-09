@@ -54,6 +54,9 @@ int main(int argc, char** argv)
         kart1.showKart();
         kart2.showKart();
 
+
+        //Await for start
+
         setActiveWindow(W);
         while(!started){
             getMouse(x,y);
@@ -63,6 +66,16 @@ int main(int argc, char** argv)
         }
         drawString(15,450, "1/3",BLACK,20);
         drawString(135,450, "1/3",BLACK,20);
+
+        fillCircle(100,375,15,BLACK);
+        milliSleep(1000);
+        fillCircle(100,375,13,RED);
+        milliSleep(1000);
+        fillCircle(100,375,13,ORANGE);
+        milliSleep(1000);
+        fillCircle(100,375,13,GREEN);
+
+
         for(int i=0;i<25000;i++){
             milliSleep(5);
             updateKeys(kart1,kart2);
@@ -92,6 +105,8 @@ int main(int argc, char** argv)
         carte.draw();
         kart1.showKart();
 
+        //Await for start
+
         setActiveWindow(W);
         while(!started){
             getMouse(x,y);
@@ -99,9 +114,18 @@ int main(int argc, char** argv)
                 started = true;
             }
         }
+
+        fillCircle(100,375,15,BLACK);
+        milliSleep(1000);
+        fillCircle(100,375,13,RED);
+        milliSleep(1000);
+        fillCircle(100,375,13,ORANGE);
+        milliSleep(1000);
+        fillCircle(100,375,13,GREEN);
+
         drawString(15,450, "1/3",BLACK,20);
         for(int i=0;i<25000;i++){
-            milliSleep(15);
+            milliSleep(30);
             setActiveWindow(W);
             updateKeys(kart1);
             run_physics(kart1,carte);

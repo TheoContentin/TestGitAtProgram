@@ -175,7 +175,7 @@ void updateKeys(Kart &kart1,Kart &kart2){
     }while(ev.type!=EVT_NONE);
 }
 
-void compute_collisions(Kart &kart1,Kart &kart2){
+void compute_collisions(Kart &kart1,Kart &kart2){  // Set collision between the two karts : We don't handle long collisions
 
     bool collision=false;
 
